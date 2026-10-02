@@ -2885,7 +2885,7 @@ window.TCG_CLOUD_CONFIG = window.TCG_CLOUD_CONFIG || {
 @media(max-width:520px){.cloudAuthActionsV190,.cloudSignedActionsV190{grid-template-columns:1fr}.cloudStatusCardV190{align-items:flex-start}}
 </style>
 
-<meta name="tcg-cloud-build" content="V200-iphone-local-fix">
+<meta name="tcg-cloud-build" content="V210-boot-stability-fix">
 </head><body class="liquidGlassV73"><div class="app">
 <div id="bootSplashV104" class="bootSplashV104" aria-hidden="true"><div class="bootGlowV104"></div><div class="bootMarkV104"><div class="bootBoltV104">⚡</div><div class="bootWordsV104"><small>TCG</small><strong>PACK RIPPER</strong><b>+</b></div></div><div class="bootLineV104"><i></i></div><div class="bootSubV104">BUILD THE COLLECTION</div></div>
 <div class="top topV104"><div class="brand brandV104"><span class="brandBoltV104">⚡</span><span class="brandCopyV104"><small>TCG</small><b>PACK RIPPER<span>+</span></b></span></div><div class="stats statsV104"><div class="pill statV104 cashV104"><small>CASH</small><strong>$<span id="coins">2,500</span></strong></div><div class="pill statV104"><small>PACKS</small><strong>📦 <span id="packs">0</span></strong></div><div class="pill statV104 hitV104"><small>HITS</small><strong>✦ <span id="hits">0</span></strong></div></div></div>
@@ -3385,7 +3385,7 @@ function v142CommitTear(){let c=document.getElementById('v142TearPiece');if(c){c
 function xy(e){let q=e.touches?e.touches[0]:e;return{x:q.clientX,y:q.clientY}}function down(e){let a=audio();if(a&&a.state==='suspended')a.resume();if(busy)return;drag=true;let q=xy(e);startX=q.x;startY=q.y;$('#tear').classList.remove('pulse');$('#pack').classList.add('v91Grab');v142StartTear();if(e.cancelable)e.preventDefault()}function move(e){if(!drag||busy)return;let q=xy(e),dx=q.x-startX,dy=q.y-startY,p=0;if(openStyle===0)p=Math.max(0,Math.min(1,dx/205));if(openStyle===1)p=Math.max(0,Math.min(1,-dy/150));if(openStyle===2)p=Math.max(0,Math.min(1,(dx-dy)/260));$('#prog').style.width=(p*100)+'%';$('#pack').style.transform=`rotateY(${Math.max(-9,Math.min(9,dx*.045))}deg) rotateX(${Math.max(-7,Math.min(7,-dy*.035))}deg)`;if(openStyle===0){$('#tear').style.left=(p*205-5)+'px';v142SetTear(p)}else if(openStyle===1){$('#tear').style.transform=`translateY(${-p*125}px) rotate(${-p*25}deg)`;$('#foilTop').style.transform=`translateY(${-p*25}px) rotateX(${p*28}deg)`}else{$('#tear').style.transform=`translate(${p*175}px,${-p*80}px) rotate(${p*35}deg)`;$('#foilTop').style.transform=`translate(${p*12}px,${-p*12}px) rotate(${p*5}deg)`}if(e.cancelable)e.preventDefault();if(p>=.96){drag=false;v142SetTear(1);v142CommitTear();beginRip()}}function up(){if(!drag)return;drag=false;$('#tear').style.left='-5px';$('#tear').style.transform='';$('#prog').style.width='0';$('#foilTop').style.transform='';$('#pack').style.transform='';$('#tear').classList.add('pulse');$('#pack').classList.remove('v91Grab');v142CancelTear()}
 let ripToken=0;function finishRip(token){if(token!==ripToken||!busy||!pulls.length)return;let p=$('#pack'),st=$('#stack'),stage=$('#stage'),inside=document.getElementById('v90InsideCards');stage.classList.add('cardModeV89');stage.classList.remove('v114TenMode','v114TenRipping');inside?.classList.remove('show','v91Emerge');p.style.display='none';document.querySelector('.v114BatchChip')?.remove();st.style.display='block';st.classList.add('v91Land');requestAnimationFrame(()=>st.classList.add('show'));$('#counter').style.display='block';$('#instruction').textContent='Drag to peek • flick the top card away';showBack();st.classList.add('v91Land');setTimeout(()=>st.classList.remove('v91Land'),760);stage.classList.remove('v91Cinematic','v91Flash')}
 function v91FoilBurst(){let stage=$('#stage');let old=document.getElementById('v91FoilBits');old?.remove();let box=document.createElement('div');box.id='v91FoilBits';box.className='v91FoilBits';for(let i=0;i<14;i++){let b=document.createElement('i');let a=(Math.PI*2*i/14)+(Math.random()-.5)*.45,dist=70+Math.random()*115;b.style.setProperty('--x',(Math.cos(a)*dist)+'px');b.style.setProperty('--y',(Math.sin(a)*dist+55)+'px');b.style.setProperty('--r',(Math.random()*180)+'deg');b.style.setProperty('--d',(520+Math.random()*380)+'ms');box.appendChild(b)}stage.appendChild(box);setTimeout(()=>box.remove(),1100)}
-async function beginRip(){busy=true;let token=++ripToken;$('#rarityBanner').classList.remove('show');if(v114PackCount===10){$('#stage').className='stage v91Cinematic v114TenMode v114TenRipping';$('#instruction').textContent='RIPPING ALL 10 PACKS…';try{sfxEventV70('tear');setTimeout(()=>sfxEventV70('wrapper'),180);setTimeout(()=>sfxEventV70('tear'),360)}catch(e){}if(navigator.vibrate)navigator.vibrate([12,18,12,18,24]);await new Promise(r=>setTimeout(r,760));}else{$('#stage').className='stage v91Cinematic';$('#instruction').textContent='';}let ok=v114PackCount===10?await v114MakeBatch():await makePack();if(!ok){v142CancelTear();busy=false;$('#stage').className='stage';v114RenderMode();return}if(v114PackCount===10){$('#stage').classList.add('v114TenMode','v114TenRipping');$('#instruction').textContent='10 PACKS RIPPED • 100 CARDS READY'}let p=$('#pack'),stage=$('#stage'),inside=document.getElementById('v90InsideCards');p.classList.remove('ripping','rip0','rip1','rip2');p.classList.add('v91Rip');stage.classList.add('v91Flash');v91FoilBurst();try{sfxEventV70('tear');setTimeout(()=>sfxEventV70('wrapper'),250)}catch(e){}if(navigator.vibrate)navigator.vibrate([12,22,16,34,26]);setTimeout(()=>inside?.classList.add('v91Emerge'),180);setTimeout(()=>{if(token===ripToken)stage.classList.remove('v91Flash')},700);setTimeout(()=>finishRip(token),1450);setTimeout(()=>{if(token===ripToken&&busy&&pulls.length&&$('#stack').style.display==='none')finishRip(token)},1950)}
+async function beginRip(){busy=true;let token=++ripToken;$('#rarityBanner').classList.remove('show');if(v114PackCount===10){$('#stage').className='stage v91Cinematic v114TenMode v114TenRipping';$('#instruction').textContent='RIPPING ALL 10 PACKS…';try{sfxEventV70('tear');setTimeout(()=>sfxEventV70('wrapper'),180);setTimeout(()=>sfxEventV70('tear'),360)}catch(e){}if(navigator.vibrate)navigator.vibrate([12,18,12,18,24]);await new Promise(r=>setTimeout(r,360));}else{$('#stage').className='stage v91Cinematic';$('#instruction').textContent='';}let ok=v114PackCount===10?await v114MakeBatch():await makePack();if(!ok){v142CancelTear();busy=false;$('#stage').className='stage';v114RenderMode();return}if(v114PackCount===10){$('#stage').classList.add('v114TenMode','v114TenRipping');$('#instruction').textContent='10 PACKS RIPPED • 100 CARDS READY'}let p=$('#pack'),stage=$('#stage'),inside=document.getElementById('v90InsideCards');p.classList.remove('ripping','rip0','rip1','rip2');p.classList.add('v91Rip');stage.classList.add('v91Flash');v91FoilBurst();try{sfxEventV70('tear');setTimeout(()=>sfxEventV70('wrapper'),250)}catch(e){}if(navigator.vibrate)navigator.vibrate([12,22,16,34,26]);setTimeout(()=>inside?.classList.add('v91Emerge'),90);setTimeout(()=>{if(token===ripToken)stage.classList.remove('v91Flash')},700);setTimeout(()=>finishRip(token),760);setTimeout(()=>{if(token===ripToken&&busy&&pulls.length&&$('#stack').style.display==='none')finishRip(token)},1050)}
 function showBack(autoReveal=false){
  let c=pulls[idx],img=$('#cardImg'),st=$('#stack');if(!c)return;
  st.className='cardStack show faceVisible flipped';st.style.transform='';st.style.opacity='1';st.dataset.faceReady='0';
@@ -3503,9 +3503,9 @@ function v74SwipeEnd(e){
  const under=document.getElementById('v76Under1');if(under)under.classList.add('v76Promote');
  st.classList.add('v76Dismiss');st.style.opacity='1';requestAnimationFrame(()=>{st.style.transform=`translate3d(${tx}px,${ty}px,0) rotate(${throwRot}deg) scale(.96)`;st.style.opacity='0'});
  cardSound();if(navigator.vibrate)navigator.vibrate(isBulkCardV64(c)?7:[10,18,12]);
- setTimeout(()=>{if(under)under.classList.remove('v76Promote');st.classList.remove('v76Dismiss');st.style.transition='';st.style.opacity='';st.style.transform='';window.v74CollectLock=false;advance(false)},355);
+ setTimeout(()=>{if(under)under.classList.remove('v76Promote');st.classList.remove('v76Dismiss');st.style.transition='';st.style.opacity='';st.style.transform='';window.v74CollectLock=false;advance(false)},220);
 }
-function advance(autoReveal=false){if(idx<pulls.length-1){let prevPack=Math.floor(idx/10)+1;idx++;let nextPack=Math.floor(idx/10)+1;if(v114PackCount===10&&nextPack!==prevPack){document.dispatchEvent(new CustomEvent('v128-packbeat',{detail:{from:prevPack,to:nextPack}}));setTimeout(()=>showBack(autoReveal),520)}else showBack(autoReveal)}else{let best=[...pulls].sort((a,b)=>tier(b)-tier(a))[0];if(v114PackCount===10){v114BatchFinish();toast('10 packs finished!');}else{let hit=pulls.some(c=>tier(c)>=2||c.secret);if(hit)state.hits++;let bestTier=tier(best);addXP(5+bestTier*3,'pack');state.history.unshift({set:sel.name,best:best.name,rarity:best.rarity||'Card',time:Date.now()});state.history=state.history.slice(0,40);save();toast('Pack finished!');}showPackSummaryV88(best);}}
+function advance(autoReveal=false){if(idx<pulls.length-1){let prevPack=Math.floor(idx/10)+1;idx++;let nextPack=Math.floor(idx/10)+1;if(v114PackCount===10&&nextPack!==prevPack){document.dispatchEvent(new CustomEvent('v128-packbeat',{detail:{from:prevPack,to:nextPack}}));setTimeout(()=>showBack(autoReveal),160)}else showBack(autoReveal)}else{let best=[...pulls].sort((a,b)=>tier(b)-tier(a))[0];if(v114PackCount===10){v114BatchFinish();toast('10 packs finished!');}else{let hit=pulls.some(c=>tier(c)>=2||c.secret);if(hit)state.hits++;let bestTier=tier(best);addXP(5+bestTier*3,'pack');state.history.unshift({set:sel.name,best:best.name,rarity:best.rarity||'Card',time:Date.now()});state.history=state.history.slice(0,40);save();toast('Pack finished!');}showPackSummaryV88(best);}}
 
 function showPackSummaryV88(best){
  busy=false;
@@ -7390,7 +7390,7 @@ body:has(#profile.active) .nav button.active{color:#ffe36d!important}
 #settings .settingsDataActionsV158 button{background:#edf4f8!important;color:#314157!important;border:1px solid #d9e5ed!important;box-shadow:none!important}
 </style>
 <style id="v158-settings-shade-fix">#settings .settingsShadeV158{background:rgba(9,17,29,.42)!important;border:0!important;border-radius:0!important;box-shadow:none!important;padding:0!important}</style>
-<script id="v160-profile-static-controller">(()=>{window.profileAchFilterV160='all';window.renderAchievementsV160=function(filter='all'){window.profileAchFilterV160=filter;let el=document.getElementById('achievementGrid');if(!el)return;let rows=ACHIEVEMENTS.map(([id,n,d,ico,get,target])=>{let v=Math.min(target,Number(get())||0),pc=Math.min(100,target?v/target*100:0),ok=!!state.achievements[id];return{id,n,d,ico,v,target,pc,ok}});if(filter==='done')rows=rows.filter(x=>x.ok);if(filter==='near')rows=rows.filter(x=>!x.ok&&x.pc>=40).sort((a,b)=>b.pc-a.pc);el.innerHTML=rows.length?rows.map(x=>`<div class="achievement ${x.ok?'done':''}"><div class="achIcon">${x.ok?x.ico:'◆'}</div><div><b>${x.n}</b><small>${x.d}</small><div class="achProgress"><i style="width:${x.pc}%"></i></div></div><em>${x.ok?'DONE':`${Math.floor(x.v)}/${x.target}`}</em></div>`).join(''):'<div class="profileEmptyV158">Nothing in this filter yet.</div>';document.querySelectorAll('[data-ach-filter-v160]').forEach(b=>b.classList.toggle('active',b.dataset.achFilterV160===filter))};let profile=document.getElementById('profile'),settings=document.getElementById('settings');profile?.addEventListener('click',e=>{let m=e.target.closest('[data-profile-mode-v160]');if(m){let v=m.dataset.profileModeV160;profile.querySelectorAll('[data-profile-mode-v160]').forEach(b=>b.classList.toggle('active',b===m));profile.querySelectorAll('[data-profile-panel-v160]').forEach(p=>p.classList.toggle('active',p.dataset.profilePanelV160===v));return}let f=e.target.closest('[data-ach-filter-v160]');if(f)renderAchievementsV160(f.dataset.achFilterV160)});let openSettings=()=>{settings?.classList.add('show');settings?.setAttribute('aria-hidden','false');try{updateAudioV68(true)}catch(e){}},closeSettings=()=>{settings?.classList.remove('show');settings?.setAttribute('aria-hidden','true')};document.getElementById('openProfileSettingsV158')?.addEventListener('click',openSettings);document.getElementById('closeProfileSettingsV158')?.addEventListener('click',closeSettings);document.getElementById('closeSettingsShadeV158')?.addEventListener('click',closeSettings);let prefs={reducedMotion:false,packTilt:true,cinematicFull:true};try{Object.assign(prefs,JSON.parse(localStorage.getItem('tcgPrefsV160')||'{}'))}catch(e){}let sync=()=>{document.documentElement.classList.toggle('v158ReducedMotion',prefs.reducedMotion);document.documentElement.classList.toggle('v158NoPackTilt',!prefs.packTilt);document.documentElement.classList.toggle('v158CinematicReduced',!prefs.cinematicFull);[['reducedMotionV160',prefs.reducedMotion,'ON','OFF'],['packTiltV160',prefs.packTilt,'ON','OFF'],['cinematicV160',prefs.cinematicFull,'FULL','REDUCED']].forEach(([id,on,a,b])=>{let x=document.getElementById(id);if(x){x.textContent=on?a:b;x.classList.toggle('on',on)}});try{localStorage.setItem('tcgPrefsV160',JSON.stringify(prefs))}catch(e){}};document.getElementById('reducedMotionV160')?.addEventListener('click',()=>{prefs.reducedMotion=!prefs.reducedMotion;sync()});document.getElementById('packTiltV160')?.addEventListener('click',()=>{prefs.packTilt=!prefs.packTilt;sync()});document.getElementById('cinematicV160')?.addEventListener('click',()=>{prefs.cinematicFull=!prefs.cinematicFull;sync()});sync();document.getElementById('exportSaveV160')?.addEventListener('click',()=>{try{let blob=new Blob([JSON.stringify({version:200,save:state},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='tcg-pack-ripper-save.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}catch(e){toast('Could not export save.')}});let inp=document.getElementById('importSaveFileV160');document.getElementById('importSaveV160')?.addEventListener('click',()=>inp?.click());inp?.addEventListener('change',async()=>{let f=inp.files?.[0];if(!f)return;try{let x=JSON.parse(await f.text()),next=x.save||x;if(!next?.binder)throw 0;if(confirm('Replace your current local save with this imported save?')){localStorage.setItem('tcgRipperSave',JSON.stringify(next));location.reload()}}catch(e){toast('Invalid save file.')}finally{inp.value=''}})})();</script>
+<script id="v160-profile-static-controller">(()=>{window.profileAchFilterV160='all';window.renderAchievementsV160=function(filter='all'){window.profileAchFilterV160=filter;let el=document.getElementById('achievementGrid');if(!el)return;let rows=ACHIEVEMENTS.map(([id,n,d,ico,get,target])=>{let v=Math.min(target,Number(get())||0),pc=Math.min(100,target?v/target*100:0),ok=!!state.achievements[id];return{id,n,d,ico,v,target,pc,ok}});if(filter==='done')rows=rows.filter(x=>x.ok);if(filter==='near')rows=rows.filter(x=>!x.ok&&x.pc>=40).sort((a,b)=>b.pc-a.pc);el.innerHTML=rows.length?rows.map(x=>`<div class="achievement ${x.ok?'done':''}"><div class="achIcon">${x.ok?x.ico:'◆'}</div><div><b>${x.n}</b><small>${x.d}</small><div class="achProgress"><i style="width:${x.pc}%"></i></div></div><em>${x.ok?'DONE':`${Math.floor(x.v)}/${x.target}`}</em></div>`).join(''):'<div class="profileEmptyV158">Nothing in this filter yet.</div>';document.querySelectorAll('[data-ach-filter-v160]').forEach(b=>b.classList.toggle('active',b.dataset.achFilterV160===filter))};let profile=document.getElementById('profile'),settings=document.getElementById('settings');profile?.addEventListener('click',e=>{let m=e.target.closest('[data-profile-mode-v160]');if(m){let v=m.dataset.profileModeV160;profile.querySelectorAll('[data-profile-mode-v160]').forEach(b=>b.classList.toggle('active',b===m));profile.querySelectorAll('[data-profile-panel-v160]').forEach(p=>p.classList.toggle('active',p.dataset.profilePanelV160===v));return}let f=e.target.closest('[data-ach-filter-v160]');if(f)renderAchievementsV160(f.dataset.achFilterV160)});let openSettings=()=>{settings?.classList.add('show');settings?.setAttribute('aria-hidden','false');try{updateAudioV68(true)}catch(e){}},closeSettings=()=>{settings?.classList.remove('show');settings?.setAttribute('aria-hidden','true')};document.getElementById('openProfileSettingsV158')?.addEventListener('click',openSettings);document.getElementById('closeProfileSettingsV158')?.addEventListener('click',closeSettings);document.getElementById('closeSettingsShadeV158')?.addEventListener('click',closeSettings);let prefs={reducedMotion:false,packTilt:true,cinematicFull:true};try{Object.assign(prefs,JSON.parse(localStorage.getItem('tcgPrefsV160')||'{}'))}catch(e){}let sync=()=>{document.documentElement.classList.toggle('v158ReducedMotion',prefs.reducedMotion);document.documentElement.classList.toggle('v158NoPackTilt',!prefs.packTilt);document.documentElement.classList.toggle('v158CinematicReduced',!prefs.cinematicFull);[['reducedMotionV160',prefs.reducedMotion,'ON','OFF'],['packTiltV160',prefs.packTilt,'ON','OFF'],['cinematicV160',prefs.cinematicFull,'FULL','REDUCED']].forEach(([id,on,a,b])=>{let x=document.getElementById(id);if(x){x.textContent=on?a:b;x.classList.toggle('on',on)}});try{localStorage.setItem('tcgPrefsV160',JSON.stringify(prefs))}catch(e){}};document.getElementById('reducedMotionV160')?.addEventListener('click',()=>{prefs.reducedMotion=!prefs.reducedMotion;sync()});document.getElementById('packTiltV160')?.addEventListener('click',()=>{prefs.packTilt=!prefs.packTilt;sync()});document.getElementById('cinematicV160')?.addEventListener('click',()=>{prefs.cinematicFull=!prefs.cinematicFull;sync()});sync();document.getElementById('exportSaveV160')?.addEventListener('click',()=>{try{let blob=new Blob([JSON.stringify({version:201,save:state},null,2)],{type:'application/json'}),url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download='tcg-pack-ripper-save.json';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000)}catch(e){toast('Could not export save.')}});let inp=document.getElementById('importSaveFileV160');document.getElementById('importSaveV160')?.addEventListener('click',()=>inp?.click());inp?.addEventListener('change',async()=>{let f=inp.files?.[0];if(!f)return;try{let x=JSON.parse(await f.text()),next=x.save||x;if(!next?.binder)throw 0;if(confirm('Replace your current local save with this imported save?')){localStorage.setItem('tcgRipperSave',JSON.stringify(next));location.reload()}}catch(e){toast('Invalid save file.')}finally{inp.value=''}})})();</script>
 <style id="v160-boot-failsafe">.bootSplashV104{animation:v160BootFailsafe .01s linear 3s forwards!important}@keyframes v160BootFailsafe{to{opacity:0;visibility:hidden;pointer-events:none}}</style>
 <style id="v161-next-level-systems">
 /* ================================
@@ -9371,7 +9371,7 @@ try{
   }
   function snapshot(){
     let prefs=null,audio=null;try{prefs=JSON.parse(localStorage.getItem('tcgPrefsV160')||'null')}catch(e){}try{audio=JSON.parse(localStorage.getItem('tcgAudioV68')||'null')}catch(e){}
-    return {version:200,saved_at:Date.now(),state:JSON.parse(JSON.stringify(state)),prefs,audio,selectedSetId:typeof sel!=='undefined'?sel?.id:null};
+    return {version:201,saved_at:Date.now(),state:JSON.parse(JSON.stringify(state)),prefs,audio,selectedSetId:typeof sel!=='undefined'?sel?.id:null};
   }
   function localChangedAt(){return Number(state?.cloudV190?.changedAt||0)}
   function markLocalChange(){state.cloudV190=state.cloudV190||{};state.cloudV190.changedAt=Date.now();}
@@ -10217,4 +10217,2308 @@ try{
  const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');if(row?.querySelector('b'))row.querySelector('b').textContent='V200 PHONE COMPAT';
 }catch(err){console.error('V200 phone compatibility',err)}})();
 </script>
+
+
+<style id="v201-android-pack-selector-style">
+/* V201 — portrait Android hit-target hardening for 1 / 10 pack selector. */
+#rip.active #v114PackMode{
+  z-index:9500!important;
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+  -webkit-tap-highlight-color:transparent!important;
+}
+#rip.active #v114PackMode button[data-count]{
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+  -webkit-tap-highlight-color:transparent!important;
+  user-select:none!important;
+  -webkit-user-select:none!important;
+  min-height:42px!important;
+}
+@media (max-width:620px) and (orientation:portrait){
+  #rip.active #v114PackMode{
+    position:fixed!important;
+    left:50%!important;
+    right:auto!important;
+    top:auto!important;
+    bottom:max(82px,calc(env(safe-area-inset-bottom) + 74px))!important;
+    transform:translate3d(-50%,0,0)!important;
+    -webkit-transform:translate3d(-50%,0,0)!important;
+    width:min(336px,calc(100vw - 34px))!important;
+    max-width:none!important;
+    min-height:52px!important;
+    display:grid!important;
+    grid-template-columns:1fr 1fr!important;
+    align-items:center!important;
+    gap:6px!important;
+    padding:5px!important;
+    isolation:isolate!important;
+    backface-visibility:hidden!important;
+    -webkit-backface-visibility:hidden!important;
+  }
+  #rip.active #v114PackMode button[data-count]{
+    width:100%!important;
+    height:42px!important;
+    min-width:0!important;
+    padding:0 12px!important;
+    position:relative!important;
+    z-index:3!important;
+  }
+  #rip.active #v114Cost{display:none!important}
+}
+</style>
+<script id="v201-android-pack-selector-script">
+(()=>{try{
+  if(window.__v201PackSelectorInstalled)return;window.__v201PackSelectorInstalled=true;
+  const old=document.getElementById('v114PackMode');if(!old)return;
+  /* Remove the stack of historical selector listeners and own this control from one final controller. */
+  const mode=old.cloneNode(true);old.replaceWith(mode);
+  mode.querySelectorAll('button[data-count]').forEach(b=>{b.type='button';b.setAttribute('role','button');b.setAttribute('aria-pressed',b.classList.contains('active')?'true':'false')});
+  let lockUntil=0;
+  function activelyOpeningV201(){
+    const stage=document.getElementById('stage'),pack=document.getElementById('pack');
+    return !!(stage?.classList.contains('cardModeV89')||stage?.classList.contains('v91Cinematic')||stage?.classList.contains('v114TenRipping')||pack?.classList.contains('v91Rip'));
+  }
+  function paintV201(next){
+    mode.querySelectorAll('button[data-count]').forEach(b=>{
+      const on=Number(b.dataset.count)===next;b.classList.toggle('active',on);b.setAttribute('aria-pressed',on?'true':'false');
+    });
+  }
+  function chooseV201(raw){
+    const next=Number(raw)===10?10:1;
+    if(activelyOpeningV201())return false;
+    /* A sealed, visible pack is a safe idle state even if an older controller left busy stale. */
+    try{busy=false;pulls=[];idx=0;v114BatchGroups=[];v114PackCount=next}catch(_e){}
+    paintV201(next);
+    try{resetPack()}catch(_e){try{v114RenderMode()}catch(__){}}
+    try{v114RenderMode()}catch(_e){}
+    try{syncPackCreditV161()}catch(_e){}
+    try{syncStarterV199()}catch(_e){}
+    requestAnimationFrame(()=>paintV201(next));
+    setTimeout(()=>paintV201(next),80);
+    return true;
+  }
+  function take(e){
+    const b=e.target?.closest?.('button[data-count]');if(!b)return;
+    if(e.cancelable)e.preventDefault();e.stopPropagation();
+    const now=Date.now();if(now<lockUntil)return;lockUntil=now+140;
+    chooseV201(b.dataset.count);
+  }
+  /* Android sometimes loses pointerup after a composited transform; switch on pointerdown instead. */
+  mode.addEventListener('pointerdown',take,{capture:true,passive:false});
+  mode.addEventListener('touchend',take,{capture:true,passive:false});
+  mode.addEventListener('click',take,{capture:true,passive:false});
+  window.forcePackModeV201=chooseV201;
+  window.forcePackModeV195=chooseV201;
+  window.forcePackModeV193=chooseV201;
+  const syncPos=()=>{try{paintV201(Number(v114PackCount)===10?10:1)}catch(_e){}};
+  window.addEventListener('resize',syncPos,{passive:true});
+  window.addEventListener('orientationchange',()=>setTimeout(syncPos,80),{passive:true});
+  syncPos();
+  const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');
+  if(row?.querySelector('b'))row.querySelector('b').textContent='V201 ANDROID SELECTOR FIX';
+}catch(err){console.error('V201 Android pack selector fix',err)}})();
+</script>
+
+
+
+<style id="v202-universal-pack-selector-style">
+/* V202 — universal mobile 1 / 10 pack selector.
+   On touch devices the selector is portalled to <body> so transformed pack/stage layers
+   cannot sit over its hit target on iOS or Android. */
+#v114PackMode.v202PackSelectorPortal{
+  position:fixed!important;
+  left:50%!important;
+  right:auto!important;
+  top:auto!important;
+  bottom:max(92px,calc(env(safe-area-inset-bottom) + 84px))!important;
+  transform:translate3d(-50%,0,0)!important;
+  -webkit-transform:translate3d(-50%,0,0)!important;
+  z-index:2147483000!important;
+  width:min(350px,calc(100vw - 30px))!important;
+  max-width:none!important;
+  min-height:56px!important;
+  box-sizing:border-box!important;
+  display:grid!important;
+  grid-template-columns:1fr 1fr!important;
+  align-items:center!important;
+  gap:6px!important;
+  margin:0!important;
+  padding:6px!important;
+  border-radius:999px!important;
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+  -webkit-tap-highlight-color:transparent!important;
+  isolation:isolate!important;
+  overflow:visible!important;
+  contain:layout style!important;
+  backface-visibility:hidden!important;
+  -webkit-backface-visibility:hidden!important;
+}
+#v114PackMode.v202PackSelectorPortal button[data-count]{
+  appearance:none!important;
+  -webkit-appearance:none!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  width:100%!important;
+  height:46px!important;
+  min-height:46px!important;
+  min-width:0!important;
+  box-sizing:border-box!important;
+  margin:0!important;
+  padding:0 14px!important;
+  border-radius:999px!important;
+  position:relative!important;
+  z-index:4!important;
+  pointer-events:auto!important;
+  touch-action:manipulation!important;
+  -webkit-tap-highlight-color:transparent!important;
+  user-select:none!important;
+  -webkit-user-select:none!important;
+  cursor:pointer!important;
+}
+#v114PackMode.v202PackSelectorPortal button[data-count]::after{
+  content:"";
+  position:absolute;
+  inset:-4px -2px;
+  border-radius:999px;
+  pointer-events:none;
+}
+#v114PackMode.v202PackSelectorPortal #v114Cost{display:none!important}
+body:not(.v202PackSelectorVisible) #v114PackMode.v202PackSelectorPortal{
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+}
+body.v202PackSelectorVisible #v114PackMode.v202PackSelectorPortal{
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+}
+@media (orientation:landscape) and (max-height:650px){
+  #v114PackMode.v202PackSelectorPortal{
+    bottom:max(70px,calc(env(safe-area-inset-bottom) + 62px))!important;
+    width:min(360px,calc(100vw - 34px))!important;
+    min-height:52px!important;
+    padding:5px!important;
+  }
+  #v114PackMode.v202PackSelectorPortal button[data-count]{height:42px!important;min-height:42px!important}
+}
+@media (max-width:390px) and (orientation:portrait){
+  #v114PackMode.v202PackSelectorPortal{width:calc(100vw - 26px)!important;bottom:max(88px,calc(env(safe-area-inset-bottom) + 80px))!important}
+}
+</style>
+<script id="v202-universal-pack-selector-script">
+(()=>{try{
+  if(window.__v202PackSelectorInstalled)return;window.__v202PackSelectorInstalled=true;
+
+  function installV202(){
+    const source=document.getElementById('v114PackMode');if(!source)return;
+    /* Clone one final time to remove every historical V114/V161/V171/V175/V193/V201
+       direct listener. V202 is now the only direct owner of this control. */
+    const marker=document.createComment('v202-pack-selector-home');
+    source.parentNode?.insertBefore(marker,source);
+    const mode=source.cloneNode(true);source.replaceWith(mode);
+    mode.dataset.controller='v202';
+    mode.querySelectorAll('button[data-count]').forEach(b=>{
+      b.type='button';
+      b.setAttribute('aria-pressed',b.classList.contains('active')?'true':'false');
+      b.tabIndex=0;
+    });
+
+    const coarse=()=>{
+      try{return matchMedia('(pointer:coarse)').matches||matchMedia('(any-pointer:coarse)').matches||innerWidth<=900}catch(_e){return innerWidth<=900}
+    };
+    function isRevealActive(){
+      const stage=document.getElementById('stage');
+      return !!(stage?.classList.contains('cardModeV89')||stage?.classList.contains('v91Cinematic')||stage?.classList.contains('v114TenRipping')||document.body.classList.contains('v129Cards')||document.body.classList.contains('v129Summary'));
+    }
+    function paint(next){
+      mode.querySelectorAll('button[data-count]').forEach(b=>{
+        const on=Number(b.dataset.count)===next;
+        b.classList.toggle('active',on);
+        b.setAttribute('aria-pressed',on?'true':'false');
+      });
+    }
+    function current(){try{return Number(v114PackCount)===10?10:1}catch(_e){return 1}}
+    function choose(raw,feedback=true){
+      const next=Number(raw)===10?10:1;
+      if(isRevealActive())return false;
+      paint(next); // visual response must be immediate, before any legacy render work.
+      try{busy=false}catch(_e){}
+      try{pulls=[];idx=0;v114BatchGroups=[];v114PackCount=next}catch(_e){}
+      try{
+        const line=document.getElementById('v114TenLine'),stage=document.getElementById('stage');
+        if(next===1&&line){line.innerHTML='';line.style.transform='translate(-50%,-50%)'}
+        if(next===1)stage?.classList.remove('v114TenMode','v114TenRipping');
+      }catch(_e){}
+      try{resetPack()}catch(_e){}
+      try{v114RenderMode()}catch(_e){}
+      try{syncPackCreditV161()}catch(_e){}
+      try{syncStarterV199()}catch(_e){}
+      paint(next);
+      requestAnimationFrame(()=>paint(next));
+      setTimeout(()=>paint(next),40);
+      setTimeout(()=>paint(next),180);
+      if(feedback){try{navigator.vibrate?.(7)}catch(_e){}}
+      return true;
+    }
+
+    let lastAt=0,lastValue=0;
+    function eventButton(e){
+      let b=e.target?.closest?.('button[data-count]');
+      if(b&&mode.contains(b))return b;
+      /* Fallback: the entire left/right half of the pill is also a hit target. */
+      const r=mode.getBoundingClientRect();
+      const p=e.touches?.[0]||e.changedTouches?.[0]||e;
+      const x=Number(p?.clientX);
+      if(Number.isFinite(x)&&x>=r.left&&x<=r.right){
+        return mode.querySelector(`button[data-count="${x<r.left+r.width/2?1:10}"]`);
+      }
+      return null;
+    }
+    function take(e){
+      const b=eventButton(e);if(!b)return;
+      const next=Number(b.dataset.count)===10?10:1;
+      const now=Date.now();
+      if(now-lastAt<330&&lastValue===next){if(e.cancelable)e.preventDefault();e.stopImmediatePropagation?.();return}
+      lastAt=now;lastValue=next;
+      if(e.cancelable)e.preventDefault();
+      e.stopImmediatePropagation?.();e.stopPropagation?.();
+      choose(next,true);
+      try{b.blur()}catch(_e){}
+    }
+
+    /* Use the earliest reliable mobile event and keep click as a desktop/accessibility fallback. */
+    if(window.PointerEvent)mode.addEventListener('pointerdown',take,{capture:true,passive:false});
+    mode.addEventListener('touchstart',take,{capture:true,passive:false});
+    mode.addEventListener('mousedown',e=>{if(e.pointerType)return;take(e)},{capture:true,passive:false});
+    mode.addEventListener('click',take,{capture:true,passive:false});
+    mode.addEventListener('keydown',e=>{
+      if(e.key!=='Enter'&&e.key!==' ')return;
+      const b=e.target?.closest?.('button[data-count]');if(!b)return;
+      e.preventDefault();choose(b.dataset.count,true);
+    },true);
+
+    function place(){
+      if(coarse()){
+        if(mode.parentNode!==document.body)document.body.appendChild(mode);
+        mode.classList.add('v202PackSelectorPortal');
+      }else{
+        mode.classList.remove('v202PackSelectorPortal');
+        if(marker.parentNode&&mode.parentNode!==marker.parentNode)marker.parentNode.insertBefore(mode,marker.nextSibling);
+      }
+      syncVisible();
+    }
+    function syncVisible(){
+      const rip=document.getElementById('rip');
+      const visible=!!(rip?.classList.contains('active')&&!isRevealActive());
+      document.body.classList.toggle('v202PackSelectorVisible',visible);
+      paint(current());
+    }
+    function hitTest(){
+      if(!mode.classList.contains('v202PackSelectorPortal')||!document.body.classList.contains('v202PackSelectorVisible'))return;
+      const bs=[...mode.querySelectorAll('button[data-count]')];
+      let ok=true;
+      for(const b of bs){
+        const r=b.getBoundingClientRect();if(!r.width||!r.height)continue;
+        const hit=document.elementFromPoint(r.left+r.width/2,r.top+r.height/2);
+        if(!(hit===b||b.contains(hit))){ok=false;break}
+      }
+      mode.dataset.hitTest=ok?'pass':'repair';
+      if(!ok){
+        /* Self-heal any newly created stacking context/overlay by re-appending at the end of body. */
+        document.body.appendChild(mode);mode.style.zIndex='2147483646';
+      }
+    }
+
+    window.forcePackModeV202=choose;
+    window.forcePackModeV201=choose;
+    window.forcePackModeV195=choose;
+    window.forcePackModeV193=choose;
+
+    const stage=document.getElementById('stage'),rip=document.getElementById('rip');
+    if(stage)new MutationObserver(()=>{syncVisible();setTimeout(hitTest,0)}).observe(stage,{attributes:true,attributeFilter:['class']});
+    if(rip)new MutationObserver(()=>{syncVisible();setTimeout(hitTest,0)}).observe(rip,{attributes:true,attributeFilter:['class']});
+    const viewportSync=()=>{place();requestAnimationFrame(hitTest);setTimeout(hitTest,120)};
+    window.addEventListener('resize',viewportSync,{passive:true});
+    window.addEventListener('orientationchange',()=>setTimeout(viewportSync,80),{passive:true});
+    window.visualViewport?.addEventListener('resize',viewportSync,{passive:true});
+    window.visualViewport?.addEventListener('scroll',()=>setTimeout(hitTest,0),{passive:true});
+
+    place();paint(current());requestAnimationFrame(hitTest);setTimeout(hitTest,180);
+    const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');
+    if(row?.querySelector('b'))row.querySelector('b').textContent='V202 UNIVERSAL SELECTOR';
+  }
+
+  /* V199's DOMContentLoaded listener creates the starter banner beside the original control.
+     Install after it has run, then portal only the selector itself. */
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',()=>setTimeout(installV202,0),{once:true});
+  else setTimeout(installV202,0);
+}catch(err){console.error('V202 universal pack selector',err)}})();
+</script>
+
+
+
+<style id="v203-glass-selector-cleanup-style">
+/* V203 — clean splash/loading behaviour, opaque glass selector styling, and local notice removal. */
+#v200LocalNotice{display:none!important;opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+
+#v114PackMode.v202PackSelectorPortal,
+#rip.active #v114PackMode{
+  background:linear-gradient(180deg,rgba(14,20,38,.84),rgba(8,12,24,.9))!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  box-shadow:0 18px 48px rgba(6,10,22,.42),inset 0 1px 0 rgba(255,255,255,.08),0 0 0 1px rgba(127,95,255,.05)!important;
+  backdrop-filter:blur(18px) saturate(150%)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(150%)!important;
+  overflow:hidden!important;
+}
+#v114PackMode.v202PackSelectorPortal::before,
+#rip.active #v114PackMode::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.08),rgba(255,255,255,.02) 38%,rgba(255,255,255,0));
+}
+#v114PackMode.v202PackSelectorPortal button[data-count],
+#rip.active #v114PackMode button[data-count]{
+  color:rgba(255,255,255,.92)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.09),rgba(255,255,255,.03))!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.08)!important;
+  font-weight:900!important;
+  letter-spacing:.8px!important;
+}
+#v114PackMode.v202PackSelectorPortal button[data-count].active,
+#rip.active #v114PackMode button[data-count].active{
+  color:#ffffff!important;
+  background:linear-gradient(180deg,rgba(156,115,255,.96),rgba(122,86,250,.95))!important;
+  border:1px solid rgba(255,255,255,.22)!important;
+  box-shadow:0 8px 20px rgba(122,86,250,.28),inset 0 1px 0 rgba(255,255,255,.24)!important;
+}
+#v114PackMode.v202PackSelectorPortal button[data-count]:active,
+#rip.active #v114PackMode button[data-count]:active{
+  transform:scale(.985)!important;
+}
+
+/* Keep the boot splash clean: never let the portalled selector sit over the loading screen. */
+body.v203BootSplashActive #v114PackMode.v202PackSelectorPortal{
+  opacity:0!important;
+  visibility:hidden!important;
+  pointer-events:none!important;
+  transform:translate3d(-50%,10px,0)!important;
+}
+</style>
+<script id="v203-glass-selector-cleanup-script">
+(()=>{try{
+  if(window.__v203GlassSelectorCleanup)return;window.__v203GlassSelectorCleanup=true;
+
+  function removeNotice(){
+    try{document.getElementById('v200LocalNotice')?.remove()}catch(_e){}
+  }
+
+  function syncBootSplash(){
+    const splash=document.getElementById('bootSplashV104');
+    const active=!!(splash && !splash.classList.contains('hide') && splash.isConnected);
+    document.body.classList.toggle('v203BootSplashActive',active);
+    if(!active) document.body.classList.remove('v203BootSplashActive');
+  }
+
+  function watchBootSplash(){
+    syncBootSplash();
+    const splash=document.getElementById('bootSplashV104');
+    if(splash){
+      new MutationObserver(syncBootSplash).observe(splash,{attributes:true,attributeFilter:['class']});
+    }
+    new MutationObserver(()=>{syncBootSplash();removeNotice()}).observe(document.body,{childList:true,subtree:true});
+    setTimeout(syncBootSplash,300);
+    setTimeout(syncBootSplash,1200);
+    setTimeout(syncBootSplash,2100);
+    setTimeout(syncBootSplash,2800);
+  }
+
+  function polishSelector(){
+    const mode=document.getElementById('v114PackMode');
+    if(!mode)return;
+    mode.setAttribute('data-style','v203-glass');
+    if(mode.classList.contains('v202PackSelectorPortal')) mode.style.willChange='transform,opacity';
+  }
+
+  function versionStamp(){
+    const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');
+    if(row?.querySelector('b')) row.querySelector('b').textContent='V203 GLASS SELECTOR CLEANUP';
+  }
+
+  function initV203(){
+    removeNotice();
+    watchBootSplash();
+    polishSelector();
+    versionStamp();
+    setTimeout(()=>{removeNotice();polishSelector();syncBootSplash()},0);
+    setTimeout(()=>{removeNotice();polishSelector();syncBootSplash()},120);
+    setTimeout(()=>{removeNotice();polishSelector();syncBootSplash()},500);
+  }
+
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',initV203,{once:true});
+  else initV203();
+}catch(err){console.error('V203 glass selector cleanup',err)}})();
+</script>
+
+
+
+<style id="v204-opaque-glass-pill-style">
+/* V204 — make the 1 PACK / 10 PACKS pill fully opaque frosted-glass. */
+#v114PackMode.v202PackSelectorPortal,
+#rip.active #v114PackMode{
+  background:linear-gradient(180deg,rgba(20,28,48,.92),rgba(12,18,34,.94))!important;
+  border:1px solid rgba(255,255,255,.18)!important;
+  border-radius:999px!important;
+  padding:7px!important;
+  box-shadow:
+    0 18px 44px rgba(5,10,24,.34),
+    inset 0 1px 0 rgba(255,255,255,.14),
+    inset 0 -1px 0 rgba(255,255,255,.03),
+    0 0 0 1px rgba(102,126,234,.06)!important;
+  backdrop-filter:blur(22px) saturate(150%)!important;
+  -webkit-backdrop-filter:blur(22px) saturate(150%)!important;
+}
+#v114PackMode.v202PackSelectorPortal::before,
+#rip.active #v114PackMode::before{
+  content:"";
+  position:absolute;
+  inset:1px;
+  border-radius:999px;
+  pointer-events:none;
+  background:linear-gradient(180deg,rgba(255,255,255,.10),rgba(255,255,255,.04) 28%,rgba(255,255,255,0) 60%);
+}
+#v114PackMode.v202PackSelectorPortal button[data-count],
+#rip.active #v114PackMode button[data-count]{
+  min-width:132px!important;
+  height:50px!important;
+  padding:0 22px!important;
+  border-radius:999px!important;
+  color:rgba(255,255,255,.95)!important;
+  border:1px solid rgba(255,255,255,.12)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.11),rgba(255,255,255,.045))!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.11),
+    inset 0 -1px 0 rgba(255,255,255,.03),
+    0 2px 8px rgba(0,0,0,.10)!important;
+  text-shadow:0 1px 1px rgba(0,0,0,.28)!important;
+  font-size:14px!important;
+  font-weight:900!important;
+  letter-spacing:.8px!important;
+}
+#v114PackMode.v202PackSelectorPortal button[data-count]:not(.active):hover,
+#rip.active #v114PackMode button[data-count]:not(.active):hover{
+  background:linear-gradient(180deg,rgba(255,255,255,.13),rgba(255,255,255,.06))!important;
+}
+#v114PackMode.v202PackSelectorPortal button[data-count].active,
+#rip.active #v114PackMode button[data-count].active{
+  color:#fff!important;
+  border:1px solid rgba(255,255,255,.20)!important;
+  background:linear-gradient(180deg,rgba(164,132,255,.88),rgba(120,92,238,.82))!important;
+  box-shadow:
+    0 10px 24px rgba(104,74,227,.30),
+    inset 0 1px 0 rgba(255,255,255,.28),
+    inset 0 -1px 0 rgba(255,255,255,.08)!important;
+}
+#v114PackMode.v202PackSelectorPortal button[data-count]:active,
+#rip.active #v114PackMode button[data-count]:active{
+  transform:scale(.982)!important;
+}
+@media (max-width:430px){
+  #v114PackMode.v202PackSelectorPortal,
+  #rip.active #v114PackMode{padding:6px!important}
+  #v114PackMode.v202PackSelectorPortal button[data-count],
+  #rip.active #v114PackMode button[data-count]{min-width:0!important;width:calc(50% - 4px)!important;height:48px!important;font-size:13px!important;padding:0 12px!important}
+}
+</style>
+<script id="v204-opaque-glass-pill-script">
+(()=>{try{
+  if(window.__v204OpaqueGlassPill)return;window.__v204OpaqueGlassPill=true;
+  function stamp(){
+    const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');
+    if(row?.querySelector('b')) row.querySelector('b').textContent='V204 OPAQUE GLASS PILL';
+  }
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',stamp,{once:true});
+  else stamp();
+}catch(err){console.error('V204 opaque glass pill',err)}})();
+</script>
+
+
+
+<style id="v205-pearlescent-selector-style">
+/* V205 — clean white pearlescent segmented glass selector. */
+#v114PackMode.v202PackSelectorPortal,
+#rip.active #v114PackMode{
+  display:grid!important;
+  grid-template-columns:minmax(0,1fr) minmax(0,1fr)!important;
+  gap:4px!important;
+  align-items:stretch!important;
+  width:min(350px,calc(100vw - 30px))!important;
+  min-height:58px!important;
+  padding:5px!important;
+  box-sizing:border-box!important;
+  border-radius:999px!important;
+  overflow:hidden!important;
+  background:
+    linear-gradient(115deg,
+      rgba(255,255,255,.96) 0%,
+      rgba(250,252,255,.93) 28%,
+      rgba(245,239,255,.92) 50%,
+      rgba(240,252,255,.93) 70%,
+      rgba(255,255,255,.96) 100%)!important;
+  border:1px solid rgba(255,255,255,.96)!important;
+  box-shadow:
+    0 14px 34px rgba(72,86,115,.20),
+    0 2px 8px rgba(112,96,170,.10),
+    inset 0 1px 0 rgba(255,255,255,1),
+    inset 0 -1px 0 rgba(155,168,200,.15)!important;
+  backdrop-filter:blur(18px) saturate(145%)!important;
+  -webkit-backdrop-filter:blur(18px) saturate(145%)!important;
+}
+#v114PackMode.v202PackSelectorPortal::before,
+#rip.active #v114PackMode::before{
+  content:"";
+  position:absolute;
+  inset:0;
+  border-radius:inherit;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 18% 15%,rgba(255,255,255,.95),transparent 34%),
+    linear-gradient(105deg,rgba(255,214,245,.10),rgba(205,229,255,.12) 48%,rgba(230,214,255,.12));
+  mix-blend-mode:screen;
+}
+#v114PackMode.v202PackSelectorPortal button[data-count],
+#rip.active #v114PackMode button[data-count]{
+  width:100%!important;
+  min-width:0!important;
+  max-width:none!important;
+  height:48px!important;
+  min-height:48px!important;
+  margin:0!important;
+  padding:0 10px!important;
+  box-sizing:border-box!important;
+  border-radius:999px!important;
+  display:flex!important;
+  align-items:center!important;
+  justify-content:center!important;
+  white-space:nowrap!important;
+  line-height:1!important;
+  font-size:13px!important;
+  font-weight:1000!important;
+  letter-spacing:.55px!important;
+  color:#253044!important;
+  text-shadow:none!important;
+  border:1px solid rgba(184,194,214,.34)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.72),rgba(244,247,252,.62))!important;
+  box-shadow:
+    inset 0 1px 0 rgba(255,255,255,.94),
+    inset 0 -1px 0 rgba(140,154,184,.08)!important;
+}
+#v114PackMode.v202PackSelectorPortal button[data-count].active,
+#rip.active #v114PackMode button[data-count].active{
+  color:#30364a!important;
+  border-color:rgba(172,149,235,.34)!important;
+  background:
+    linear-gradient(115deg,
+      rgba(255,255,255,.98) 0%,
+      rgba(248,241,255,.96) 34%,
+      rgba(238,246,255,.96) 68%,
+      rgba(255,255,255,.98) 100%)!important;
+  box-shadow:
+    0 6px 16px rgba(126,105,203,.18),
+    inset 0 1px 0 rgba(255,255,255,1),
+    inset 0 -1px 0 rgba(161,140,225,.12),
+    0 0 0 1px rgba(255,255,255,.48)!important;
+}
+#v114PackMode.v202PackSelectorPortal button[data-count]:active,
+#rip.active #v114PackMode button[data-count]:active{
+  transform:scale(.985)!important;
+}
+#v114PackMode.v202PackSelectorPortal #v114Cost,
+#rip.active #v114PackMode #v114Cost{display:none!important}
+
+@media (max-width:430px){
+  #v114PackMode.v202PackSelectorPortal,
+  #rip.active #v114PackMode{
+    width:calc(100vw - 28px)!important;
+    min-height:56px!important;
+    padding:4px!important;
+    gap:4px!important;
+  }
+  #v114PackMode.v202PackSelectorPortal button[data-count],
+  #rip.active #v114PackMode button[data-count]{
+    height:48px!important;
+    min-height:48px!important;
+    width:100%!important;
+    font-size:12.5px!important;
+    padding:0 8px!important;
+  }
+}
+</style>
+<script id="v205-pearlescent-selector-script">
+(()=>{try{
+  if(window.__v205PearlescentSelector)return;window.__v205PearlescentSelector=true;
+  const stamp=()=>{
+    const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');
+    if(row?.querySelector('b'))row.querySelector('b').textContent='V205 PEARLESCENT SELECTOR';
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',stamp,{once:true});else stamp();
+}catch(err){console.error('V205 pearlescent selector',err)}})();
+</script>
+
+
+
+<style id="v206-pack-stage-cleanup-style">
+/* V206 — make the pack scene seamless, give the booster cleaner 3D presence,
+   and align the tear rail to the true cut line used by the animation. */
+#rip.active #stage{--v206-cut-y:13.2%;}
+#rip.active #pack{
+  top:49%!important;
+  width:min(252px,62vw)!important;
+  height:min(456px,54dvh)!important;
+  background:transparent!important;
+  filter:
+    drop-shadow(0 12px 10px rgba(32,44,73,.10))
+    drop-shadow(0 28px 22px rgba(20,31,56,.18))!important;
+  transform-style:preserve-3d!important;
+}
+#rip.active #pack.officialPack,
+#rip.active #pack.officialPack *{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;}
+#rip.active #pack .foil,
+#rip.active #pack .v142TearPiece,
+#rip.active #pack #foilTop{
+  background:transparent!important;
+  border:none!important;
+  box-shadow:none!important;
+}
+#rip.active #pack.officialPack .foil,
+#rip.active #pack .v142TearPiece{overflow:visible!important;}
+#rip.active #pack.officialPack .packArt,
+#rip.active #pack .v142TearPiece .packArt{
+  position:absolute!important;
+  left:8%!important;
+  top:0!important;
+  width:84%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  display:block!important;
+  filter:
+    drop-shadow(0 2px 0 rgba(255,255,255,.20))
+    drop-shadow(0 10px 12px rgba(30,42,68,.11))
+    drop-shadow(0 24px 18px rgba(18,29,54,.16))!important;
+  transform:perspective(900px) rotateX(1.25deg) rotateY(-4deg) translateZ(0)!important;
+  transform-origin:50% 50%!important;
+}
+#rip.active #pack.v91Grab .packArt,
+#rip.active #pack.v91Grab .v142TearPiece .packArt{
+  transform:perspective(900px) rotateX(2.8deg) rotateY(-8deg) translateY(-1px)!important;
+}
+#rip.active #pack.officialPack .foil::before,
+#rip.active #pack .v142TearPiece::before{
+  content:"";
+  position:absolute;
+  inset:1.4% 8% 2.6%;
+  border-radius:18px;
+  pointer-events:none;
+  background:
+    linear-gradient(102deg,
+      rgba(255,255,255,.15) 0%,
+      rgba(255,255,255,.18) 6%,
+      transparent 17%,
+      transparent 84%,
+      rgba(255,255,255,.07) 94%,
+      rgba(255,255,255,.13) 100%),
+    linear-gradient(180deg,rgba(255,255,255,.14),transparent 16%,transparent 82%,rgba(0,0,0,.07));
+  mix-blend-mode:screen;
+  opacity:.88;
+}
+#rip.active #pack.officialPack .foil::after,
+#rip.active #pack .v142TearPiece::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:radial-gradient(ellipse at 50% 92%,rgba(13,24,46,.16) 0%,rgba(13,24,46,0) 58%);
+  opacity:.58;
+}
+#rip.active #pack .packShade,
+#rip.active #pack .pklogo,
+#rip.active #pack .poke,
+#rip.active #pack .booster{display:none!important;}
+#rip.active #pack .tearGuide{
+  pointer-events:none!important;
+  top:var(--v206-cut-y)!important;
+  left:9%!important;
+  right:9%!important;
+  height:2px!important;
+  border-radius:999px!important;
+  opacity:.95!important;
+  background:linear-gradient(90deg,
+    rgba(255,255,255,.75),
+    rgba(202,214,240,.90) 18%,
+    rgba(255,255,255,.84) 50%,
+    rgba(202,214,240,.90) 82%,
+    rgba(255,255,255,.75))!important;
+  box-shadow:
+    0 0 0 1px rgba(255,255,255,.68),
+    0 5px 18px rgba(123,145,194,.12)!important;
+}
+#rip.active #pack .tearGuide::after{
+  content:"";
+  position:absolute;
+  inset:-6px 0;
+  border-radius:999px;
+  background:linear-gradient(90deg,transparent,rgba(255,255,255,.26) 24%,rgba(255,255,255,.26) 76%,transparent);
+  filter:blur(4px);
+}
+#rip.active #pack .packGestureOverlay{inset:0!important;background:transparent!important;}
+#rip.active #pack .tearKnob{
+  top:calc(var(--v206-cut-y) - 18px)!important;
+  width:38px!important;
+  height:38px!important;
+  border-radius:50%!important;
+  border:1px solid rgba(255,255,255,.96)!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.97),rgba(241,246,252,.92))!important;
+  color:#2b3950!important;
+  box-shadow:
+    0 10px 22px rgba(57,73,108,.16),
+    inset 0 1px 0 rgba(255,255,255,1)!important;
+}
+#rip.active #pack .tearKnob.pulse{animation:v206TearPulse 1.35s ease-in-out infinite!important;}
+@keyframes v206TearPulse{
+  0%,100%{box-shadow:0 10px 22px rgba(57,73,108,.16),inset 0 1px 0 rgba(255,255,255,1),0 0 0 0 rgba(255,255,255,0)}
+  50%{box-shadow:0 10px 22px rgba(57,73,108,.16),inset 0 1px 0 rgba(255,255,255,1),0 0 0 10px rgba(255,255,255,.20)}
+}
+#rip.active #pack .packGestureHint{display:none!important;}
+#rip.active #instruction{
+  top:auto!important;
+  bottom:132px!important;
+  width:min(332px,80vw)!important;
+  padding:9px 14px!important;
+  text-align:center!important;
+  color:#55637c!important;
+  background:rgba(255,255,255,.62)!important;
+  border:1px solid rgba(255,255,255,.88)!important;
+  border-radius:999px!important;
+  box-shadow:0 10px 24px rgba(34,46,72,.09)!important;
+  backdrop-filter:blur(14px)!important;
+  -webkit-backdrop-filter:blur(14px)!important;
+  font:900 9.5px/1.1 system-ui!important;
+  letter-spacing:.16em!important;
+  text-transform:uppercase!important;
+}
+#rip.active .tearProgress{
+  top:auto!important;
+  bottom:112px!important;
+  width:min(180px,42vw)!important;
+  height:4px!important;
+  border-radius:999px!important;
+  background:rgba(205,216,233,.40)!important;
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.75)!important;
+  overflow:hidden!important;
+}
+#rip.active .tearProgress i{
+  background:linear-gradient(90deg,rgba(193,170,255,.95),rgba(155,208,255,.96))!important;
+  border-radius:inherit!important;
+}
+@media(max-height:760px){
+  #rip.active #pack{top:48%!important;width:min(238px,60vw)!important;height:min(430px,52dvh)!important}
+  #rip.active #instruction{bottom:126px!important}
+  #rip.active .tearProgress{bottom:106px!important}
+}
+</style>
+<script id="v206-pack-stage-cleanup-script">
+(()=>{try{
+  if(window.__v206PackStageCleanup)return;window.__v206PackStageCleanup=true;
+  const stamp=()=>{
+    const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');
+    if(row?.querySelector('b')) row.querySelector('b').textContent='V206 PACK STAGE CLEANUP';
+  };
+  const syncTearRail=()=>{
+    const pack=document.getElementById('pack');
+    const guide=document.querySelector('#pack .tearGuide');
+    const knob=document.getElementById('tear');
+    if(!pack||!guide||!knob)return;
+    const h=pack.getBoundingClientRect().height||0;
+    if(!h)return;
+    const cutPx=h*0.132;
+    guide.style.top=cutPx+'px';
+    knob.style.top=(cutPx-18)+'px';
+  };
+  const init=()=>{stamp();syncTearRail();};
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+  window.addEventListener('resize',syncTearRail,{passive:true});
+}catch(err){console.error('V206 pack stage cleanup',err)}})();
+</script>
+
+
+
+<style id="v207-seamless-pack-style">
+/* V207 — remove the translucent ghost shell entirely. The booster itself is the object. */
+#rip.active #stage{--v207-cut:13.2%;}
+
+/* Kill every legacy full-size wrapper/glass overlay responsible for the box behind the art. */
+#rip.active #pack,
+#rip.active #pack .foil,
+#rip.active #pack #foilTop,
+#rip.active #pack .v142TearPiece{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+}
+#rip.active #pack .foil::before,
+#rip.active #pack .foil::after,
+#rip.active #pack #foilTop::before,
+#rip.active #pack #foilTop::after,
+#rip.active #pack .v142TearPiece::before,
+#rip.active #pack .v142TearPiece::after{
+  content:none!important;
+  display:none!important;
+}
+
+/* Exact physical pack footprint. */
+#rip.active #pack{
+  top:49%!important;
+  width:min(224px,57vw)!important;
+  height:min(408px,49dvh)!important;
+  transform:translate(-50%,-50%) perspective(1000px) rotateY(-2.6deg) rotateX(1deg)!important;
+  transform-style:preserve-3d!important;
+  filter:drop-shadow(0 15px 12px rgba(35,46,70,.12)) drop-shadow(0 28px 21px rgba(21,31,52,.14))!important;
+  overflow:visible!important;
+  border-radius:0!important;
+  animation:v207PackFloat 4.2s ease-in-out infinite!important;
+}
+@keyframes v207PackFloat{
+  0%,100%{transform:translate(-50%,-50%) perspective(1000px) rotateY(-2.6deg) rotateX(1deg) translateY(0)}
+  50%{transform:translate(-50%,-50%) perspective(1000px) rotateY(-2deg) rotateX(.5deg) translateY(-3px)}
+}
+#rip.active #pack.v91Grab{
+  animation:none!important;
+  transform:translate(-50%,-50%) perspective(1000px) rotateY(-5deg) rotateX(2deg) scale(1.012)!important;
+}
+
+/* The artwork fills the actual shell — no 8% transparent staging margins. */
+#rip.active #pack.officialPack #foil,
+#rip.active #pack .v142TearPiece{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  overflow:visible!important;
+  border-radius:0!important;
+}
+#rip.active #pack.officialPack .packArt,
+#rip.active #pack .v142TearPiece .packArt{
+  position:absolute!important;
+  inset:0!important;
+  left:0!important;
+  top:0!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  border-radius:0!important;
+  filter:none!important;
+  transform:none!important;
+  display:block!important;
+}
+
+/* Tiny edge geometry only — reads as foil thickness, never as a surrounding glass box. */
+#rip.active #pack::before{
+  content:"";
+  position:absolute;
+  z-index:-1;
+  top:3.5%;
+  right:-5px;
+  bottom:3.5%;
+  width:7px;
+  border-radius:0 5px 5px 0;
+  background:linear-gradient(90deg,rgba(85,95,120,.20),rgba(255,255,255,.48) 45%,rgba(71,80,101,.18));
+  transform:translateZ(-2px) skewY(-.7deg);
+  opacity:.72;
+  pointer-events:none;
+}
+#rip.active #pack::after{
+  content:"";
+  position:absolute;
+  z-index:-2;
+  left:10%;
+  right:7%;
+  bottom:-8px;
+  height:18px;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(35,48,73,.18),rgba(35,48,73,0) 70%);
+  filter:blur(6px);
+  pointer-events:none;
+}
+
+/* True cut rail = the same 13.2% used by v142SetTear()/v142CommitTear(). */
+#rip.active #pack .tearGuide{
+  top:var(--v207-cut)!important;
+  left:0!important;
+  right:0!important;
+  width:100%!important;
+  height:2px!important;
+  opacity:.92!important;
+  border-radius:0!important;
+  background:linear-gradient(90deg,rgba(255,255,255,.90),rgba(218,229,244,.92) 38%,rgba(255,255,255,.96) 50%,rgba(218,229,244,.92) 62%,rgba(255,255,255,.90))!important;
+  box-shadow:0 1px 0 rgba(75,90,120,.10),0 0 8px rgba(255,255,255,.28)!important;
+}
+#rip.active #pack .tearGuide::after{content:none!important;display:none!important}
+
+/* Compact handle anchored to the actual wrapper edge. */
+#rip.active #pack .tearKnob{
+  top:calc(var(--v207-cut) - 17px)!important;
+  left:-17px!important;
+  width:34px!important;
+  height:34px!important;
+  border-radius:50%!important;
+  background:rgba(255,255,255,.94)!important;
+  border:1px solid rgba(255,255,255,1)!important;
+  color:#344157!important;
+  font-size:18px!important;
+  box-shadow:0 6px 16px rgba(42,54,78,.14),inset 0 1px 0 #fff!important;
+}
+#rip.active #pack .tearKnob.pulse{animation:v207KnobPulse 1.35s ease-in-out infinite!important}
+@keyframes v207KnobPulse{50%{box-shadow:0 6px 16px rgba(42,54,78,.14),inset 0 1px 0 #fff,0 0 0 7px rgba(255,255,255,.16)}}
+
+/* No extra glass container / gesture panels. */
+#rip.active #pack .packGestureOverlay{inset:0!important;background:none!important;border:0!important;box-shadow:none!important}
+#rip.active #pack .packGestureHint{display:none!important}
+#rip.active #pack .packShade{display:none!important}
+#rip.active #pack .crimp{display:none!important}
+
+/* Minimal cut instruction under the object — no pill. */
+#rip.active #instruction{
+  top:auto!important;
+  bottom:126px!important;
+  width:auto!important;
+  max-width:78vw!important;
+  padding:0!important;
+  background:none!important;
+  border:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  color:#6c7890!important;
+  font:900 9px/1 system-ui!important;
+  letter-spacing:.18em!important;
+  text-transform:uppercase!important;
+  white-space:nowrap!important;
+}
+#rip.active .tearProgress{
+  top:auto!important;
+  bottom:108px!important;
+  width:126px!important;
+  height:3px!important;
+  background:rgba(154,171,198,.24)!important;
+  box-shadow:none!important;
+}
+#rip.active .tearProgress i{background:linear-gradient(90deg,#c8afff,#9ed8ff)!important}
+
+/* The 10-pack fan has its own scene; no hidden single-pack geometry leaks through. */
+#rip.active .stage.v114TenMode #pack{opacity:0!important;pointer-events:none!important}
+
+@media(max-height:760px){
+  #rip.active #pack{top:48%!important;width:min(204px,54vw)!important;height:min(372px,47dvh)!important}
+  #rip.active #instruction{bottom:122px!important}
+  #rip.active .tearProgress{bottom:105px!important}
+}
+</style>
+<script id="v207-seamless-pack-script">
+(()=>{try{
+  if(window.__v207SeamlessPack)return;window.__v207SeamlessPack=true;
+  const CUT=.132;
+  function sync(){
+    const pack=document.getElementById('pack'),guide=document.querySelector('#pack .tearGuide'),knob=document.getElementById('tear');
+    if(!pack||!guide||!knob)return;
+    const h=pack.getBoundingClientRect().height;
+    if(!h)return;
+    const y=h*CUT;
+    guide.style.setProperty('top',y+'px','important');
+    knob.style.setProperty('top',(y-17)+'px','important');
+  }
+  function stamp(){
+    const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');
+    if(row?.querySelector('b'))row.querySelector('b').textContent='V207 SEAMLESS PACK';
+  }
+  const init=()=>{stamp();sync();setTimeout(sync,50);setTimeout(sync,400)};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+  window.addEventListener('resize',sync,{passive:true});
+  window.visualViewport?.addEventListener('resize',sync,{passive:true});
+}catch(err){console.error('V207 seamless pack',err)}})();
+</script>
+
+
+<style id="v208-clean-pack-style">
+/* V208 — pack-only presentation, seamless cut slider, foil shine on the pack itself. */
+#rip.active #pack{
+  --v208-base-ry:-1.8deg;
+  --v208-base-rx:.6deg;
+  --v208-drag-ry:0deg;
+  --v208-drag-rx:0deg;
+  --v208-lift:0px;
+  --v208-cut:13.2%;
+  top:49%!important;
+  width:min(226px,58vw)!important;
+  height:min(408px,49dvh)!important;
+  overflow:visible!important;
+  border-radius:0!important;
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+  backdrop-filter:none!important;
+  -webkit-backdrop-filter:none!important;
+  transform-style:preserve-3d!important;
+  transform:translate(-50%,-50%) perspective(1000px) rotateY(calc(var(--v208-base-ry) + var(--v208-drag-ry))) rotateX(calc(var(--v208-base-rx) + var(--v208-drag-rx))) translateY(var(--v208-lift))!important;
+  filter:drop-shadow(0 16px 16px rgba(33,42,63,.10)) drop-shadow(0 26px 28px rgba(25,35,56,.12))!important;
+  animation:v208PackFloat 4.4s ease-in-out infinite!important;
+}
+@keyframes v208PackFloat{
+  0%,100%{transform:translate(-50%,-50%) perspective(1000px) rotateY(calc(var(--v208-base-ry) + var(--v208-drag-ry))) rotateX(calc(var(--v208-base-rx) + var(--v208-drag-rx))) translateY(var(--v208-lift))}
+  50%{transform:translate(-50%,-50%) perspective(1000px) rotateY(calc(var(--v208-base-ry) + var(--v208-drag-ry))) rotateX(calc(var(--v208-base-rx) + var(--v208-drag-rx))) translateY(calc(var(--v208-lift) - 3px))}
+}
+#rip.active #pack.v91Grab{animation:none!important}
+#rip.active #pack::before,
+#rip.active #pack::after{
+  content:"";
+  position:absolute;
+  pointer-events:none;
+}
+#rip.active #pack::before{
+  inset:0;
+  z-index:6;
+  background:
+    linear-gradient(112deg,rgba(255,255,255,0) 24%,rgba(255,255,255,.24) 33%,rgba(255,255,255,.48) 38%,rgba(255,255,255,.08) 45%,rgba(255,255,255,0) 55%),
+    linear-gradient(180deg,rgba(255,255,255,.20),rgba(255,255,255,0) 18%,rgba(255,255,255,0) 76%,rgba(255,255,255,.10) 100%);
+  mix-blend-mode:screen;
+  opacity:.78;
+  animation:v208FoilSweep 3.1s linear infinite;
+}
+@keyframes v208FoilSweep{
+  0%{transform:translateX(-42%) translateZ(2px)}
+  100%{transform:translateX(42%) translateZ(2px)}
+}
+#rip.active #pack::after{
+  left:11%; right:11%; bottom:-10px; height:18px;
+  z-index:-1;
+  border-radius:50%;
+  background:radial-gradient(ellipse,rgba(31,42,64,.22),rgba(31,42,64,0) 72%);
+  filter:blur(7px);
+}
+#rip.active #pack,
+#rip.active #pack .foil,
+#rip.active #pack #foilTop,
+#rip.active #pack .v142TearPiece{
+  background:transparent!important;
+  border:0!important;
+  box-shadow:none!important;
+}
+#rip.active #pack .foil,
+#rip.active #pack #foilTop,
+#rip.active #pack .v142TearPiece{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  overflow:visible!important;
+  border-radius:0!important;
+}
+#rip.active #pack .foil::before,
+#rip.active #pack #foilTop::before,
+#rip.active #pack .v142TearPiece::before{content:none!important;display:none!important}
+#rip.active #pack .foil::after,
+#rip.active #pack #foilTop::after,
+#rip.active #pack .v142TearPiece::after{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:-16% -24%!important;
+  background:linear-gradient(106deg,rgba(255,255,255,0) 39%,rgba(255,255,255,.30) 48%,rgba(255,255,255,.58) 50%,rgba(255,255,255,.18) 53%,rgba(255,255,255,0) 61%)!important;
+  mix-blend-mode:screen!important;
+  opacity:.58!important;
+  animation:v208PackGlint 2.6s linear infinite!important;
+  pointer-events:none!important;
+}
+@keyframes v208PackGlint{from{transform:translateX(-34%) rotate(9deg)}to{transform:translateX(34%) rotate(9deg)}}
+#rip.active #pack.officialPack .packArt,
+#rip.active #pack .v142TearPiece .packArt{
+  position:absolute!important;
+  inset:0!important;
+  width:100%!important;
+  height:100%!important;
+  object-fit:contain!important;
+  object-position:center!important;
+  display:block!important;
+  transform:translateZ(1px)!important;
+  filter:saturate(1.02) contrast(1.03)!important;
+}
+#rip.active #pack .packGestureOverlay{inset:-4px!important;background:none!important;border:0!important;box-shadow:none!important;touch-action:none!important}
+#rip.active #pack .packGestureHint,
+#rip.active #pack .packShade,
+#rip.active #pack .crimp{display:none!important}
+#rip.active #pack .tearGuide{
+  left:0!important; right:0!important; width:100%!important; height:2px!important;
+  top:var(--v208-cut)!important;
+  background:linear-gradient(90deg,rgba(255,255,255,.88),rgba(231,238,247,.96) 50%,rgba(255,255,255,.88))!important;
+  box-shadow:0 0 10px rgba(255,255,255,.24)!important;
+  opacity:.96!important;
+  border-radius:999px!important;
+}
+#rip.active #pack .tearGuide::after{content:none!important;display:none!important}
+#rip.active #pack .tearKnob{
+  top:calc(var(--v208-cut) - 19px)!important;
+  left:-18px!important;
+  width:38px!important; height:38px!important; border-radius:50%!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.98),rgba(243,247,255,.92))!important;
+  border:1px solid rgba(255,255,255,.98)!important;
+  box-shadow:0 7px 16px rgba(39,51,74,.16), inset 0 1px 0 rgba(255,255,255,.95)!important;
+  color:#394760!important; font-size:18px!important;
+}
+#rip.active #pack .tearKnob.pulse{animation:v208KnobPulse 1.35s ease-in-out infinite!important}
+@keyframes v208KnobPulse{50%{box-shadow:0 7px 16px rgba(39,51,74,.16), inset 0 1px 0 rgba(255,255,255,.95), 0 0 0 8px rgba(255,255,255,.12)}}
+#rip.active #instruction{
+  top:auto!important; bottom:124px!important; width:auto!important; max-width:82vw!important;
+  padding:0!important; background:none!important; border:0!important; box-shadow:none!important;
+  color:#77839a!important; font:900 9px/1 system-ui!important; letter-spacing:.18em!important;
+  text-transform:uppercase!important; white-space:nowrap!important;
+}
+#rip.active .tearProgress{top:auto!important; bottom:108px!important; width:124px!important; height:3px!important; background:rgba(154,171,198,.22)!important; box-shadow:none!important}
+#rip.active .tearProgress i{background:linear-gradient(90deg,#d7c0ff,#9fdcff)!important}
+#rip.active .stage.v114TenMode #pack{opacity:0!important;pointer-events:none!important}
+@media(max-height:760px){
+  #rip.active #pack{top:48%!important;width:min(206px,55vw)!important;height:min(372px,47dvh)!important}
+  #rip.active #instruction{bottom:121px!important}
+  #rip.active .tearProgress{bottom:104px!important}
+}
+</style>
+<script id="v208-clean-pack-script">
+(()=>{try{
+  if(window.__v208CleanPack)return; window.__v208CleanPack=true;
+  const CUT=0.132;
+  function stamp(){
+    const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');
+    if(row?.querySelector('b')) row.querySelector('b').textContent='V208 CLEAN CUT PACK';
+  }
+  function sync(){
+    const pack=document.getElementById('pack');
+    const guide=document.querySelector('#pack .tearGuide');
+    const knob=document.getElementById('tear');
+    if(!pack||!guide||!knob) return;
+    const h=pack.getBoundingClientRect().height||0;
+    if(!h) return;
+    const y=h*CUT;
+    guide.style.setProperty('top',y+'px','important');
+    knob.style.setProperty('top',(y-19)+'px','important');
+    if(!(typeof drag!=='undefined' && drag)){
+      knob.style.left='-18px';
+      pack.style.setProperty('--v208-drag-ry','0deg');
+      pack.style.setProperty('--v208-drag-rx','0deg');
+      pack.style.setProperty('--v208-lift','0px');
+    }
+  }
+  function travel(){
+    const pack=document.getElementById('pack');
+    const rect=pack?.getBoundingClientRect();
+    if(!rect) return 205;
+    return Math.max(160, rect.width-6);
+  }
+  down = window.down = function(e){
+    let a=audio(); if(a&&a.state==='suspended') a.resume();
+    if(busy) return;
+    drag=true;
+    let q=xy(e); startX=q.x; startY=q.y;
+    const tear=document.getElementById('tear'), pack=document.getElementById('pack');
+    tear?.classList.remove('pulse');
+    pack?.classList.add('v91Grab');
+    pack?.style.setProperty('--v208-lift','-1px'); pack?.style.setProperty('--v211-cut-width','0%');
+    v142StartTear();
+    if(e.cancelable) e.preventDefault();
+  };
+  move = window.move = function(e){
+    if(!drag||busy) return;
+    let q=xy(e), dx=q.x-startX, dy=q.y-startY, p=0;
+    const pack=document.getElementById('pack'), tear=document.getElementById('tear');
+    const tr=travel();
+    if(openStyle===0) p=Math.max(0,Math.min(1,dx/tr));
+    else if(openStyle===1) p=Math.max(0,Math.min(1,-dy/150));
+    else p=Math.max(0,Math.min(1,(dx-dy)/260));
+    document.getElementById('prog').style.width=(p*100)+'%'; if(pack)pack.style.setProperty('--v211-cut-width',(p*100)+'%');
+    if(pack){
+      pack.style.setProperty('--v208-drag-ry',`${Math.max(-7,Math.min(7,dx*.035))}deg`);
+      pack.style.setProperty('--v208-drag-rx',`${Math.max(-5,Math.min(5,-dy*.028))}deg`);
+      pack.style.setProperty('--v208-lift',`${-(1+p*2.5).toFixed(2)}px`);
+    }
+    if(openStyle===0){
+      if(tear) tear.style.setProperty('left',(-18 + p*tr)+'px','important');
+      v142SetTear(p);
+    }else if(openStyle===1){
+      if(tear) tear.style.transform=`translateY(${-p*125}px) rotate(${-p*25}deg)`;
+      document.getElementById('foilTop').style.transform=`translateY(${-p*25}px) rotateX(${p*28}deg)`;
+    }else{
+      if(tear) tear.style.transform=`translate(${p*175}px,${-p*80}px) rotate(${p*35}deg)`;
+      document.getElementById('foilTop').style.transform=`translate(${p*12}px,${-p*12}px) rotate(${p*5}deg)`;
+    }
+    if(e.cancelable) e.preventDefault();
+    if(p>=.97){
+      drag=false;
+      if(pack){
+        pack.style.setProperty('--v208-drag-ry','0deg');
+        pack.style.setProperty('--v208-drag-rx','0deg');
+        pack.style.setProperty('--v208-lift','-2px');
+      }
+      v142SetTear(1); v142CommitTear(); beginRip();
+    }
+  };
+  up = window.up = function(){
+    if(!drag) return;
+    drag=false;
+    const tear=document.getElementById('tear'), pack=document.getElementById('pack');
+    if(tear){ tear.style.setProperty('left','-18px','important'); tear.style.transform=''; tear.classList.add('pulse'); }
+    document.getElementById('prog').style.width='0';
+    document.getElementById('foilTop').style.transform='';
+    if(pack){
+      pack.classList.remove('v91Grab');
+      pack.style.setProperty('--v208-drag-ry','0deg');
+      pack.style.setProperty('--v208-drag-rx','0deg');
+      pack.style.setProperty('--v208-lift','0px');
+      pack.style.setProperty('--v211-cut-width','0%');
+      pack.style.transform='';
+    }
+    v142CancelTear();
+  };
+  const init=()=>{stamp();sync();setTimeout(sync,60);setTimeout(sync,420)};
+  if(document.readyState==='loading') document.addEventListener('DOMContentLoaded',init,{once:true}); else init();
+  window.addEventListener('resize',sync,{passive:true});
+  window.visualViewport?.addEventListener('resize',sync,{passive:true});
+}catch(err){console.error('V208 clean pack',err)}})();
+</script>
+
+
+<style id="v209-premium-rip-polish-style">
+/* V209 — premium pack presence + smoother sealed-to-open transition. */
+#rip.active #pack{
+  width:min(238px,60vw)!important;
+  height:min(430px,51dvh)!important;
+  filter:
+    drop-shadow(0 14px 14px rgba(30,40,64,.10))
+    drop-shadow(0 30px 30px rgba(19,29,50,.14))!important;
+}
+#rip.active #pack::before{
+  opacity:.9!important;
+  background:
+    linear-gradient(112deg,rgba(255,255,255,0) 22%,rgba(255,255,255,.18) 30%,rgba(255,255,255,.62) 38%,rgba(209,227,255,.28) 43%,rgba(255,255,255,0) 54%),
+    radial-gradient(circle at 28% 16%,rgba(255,255,255,.18),rgba(255,255,255,0) 30%),
+    linear-gradient(180deg,rgba(255,255,255,.18),rgba(255,255,255,0) 20%,rgba(255,255,255,0) 78%,rgba(255,255,255,.08) 100%)!important;
+  animation:v209PearlSweep 3.25s ease-in-out infinite!important;
+}
+@keyframes v209PearlSweep{
+  0%{transform:translateX(-48%) translateZ(2px);opacity:.55}
+  44%{opacity:.92}
+  100%{transform:translateX(48%) translateZ(2px);opacity:.55}
+}
+#rip.active #pack .foil::after,
+#rip.active #pack #foilTop::after,
+#rip.active #pack .v142TearPiece::after{
+  opacity:.66!important;
+  filter:blur(.15px)!important;
+  animation:v209Glint 2.9s linear infinite!important;
+}
+@keyframes v209Glint{from{transform:translateX(-38%) rotate(8deg)}to{transform:translateX(38%) rotate(8deg)}}
+
+/* Cleaner cut rail and handle — integrated with the pack rather than floating in the scene. */
+#rip.active #pack .tearGuide{
+  height:1.5px!important;
+  background:linear-gradient(90deg,rgba(255,255,255,.92),rgba(222,232,247,.96) 50%,rgba(255,255,255,.92))!important;
+  box-shadow:0 0 7px rgba(255,255,255,.22)!important;
+}
+#rip.active #pack .tearKnob{
+  width:36px!important;height:36px!important;
+  left:-17px!important;
+  top:calc(var(--v208-cut) - 18px)!important;
+  background:linear-gradient(180deg,#fff,rgba(243,247,253,.95))!important;
+  box-shadow:0 7px 15px rgba(44,55,79,.15),inset 0 1px 0 #fff!important;
+}
+#rip.active #pack.v91Grab .tearKnob{transform:scale(1.035)!important}
+
+/* Small tactile response while the seal is being dragged. */
+#rip.active #pack.v91Grab{
+  filter:drop-shadow(0 18px 18px rgba(31,41,64,.12)) drop-shadow(0 34px 34px rgba(18,28,49,.16))!important;
+}
+#rip.active #pack.v91Grab::before{opacity:1!important}
+
+/* Tear completion feels like one motion instead of a hard jump. */
+#rip.active #pack.v91Rip{
+  animation:v209PackRelease 1.22s cubic-bezier(.16,.82,.2,1) both!important;
+}
+@keyframes v209PackRelease{
+  0%{opacity:1;transform:translate(-50%,-50%) perspective(1000px) rotateY(-1.5deg) rotateX(.5deg) scale(1)}
+  20%{transform:translate(-50%,-50%) perspective(1000px) rotateY(1deg) rotateX(-1deg) scale(1.025)}
+  48%{transform:translate(-50%,-49%) perspective(1000px) rotateY(-2deg) rotateX(1deg) scale(.985)}
+  100%{opacity:.18;transform:translate(-50%,-42%) perspective(1000px) rotateY(-5deg) rotateX(4deg) scale(.90)}
+}
+
+/* Cards emerge from exactly where the wrapper was, reducing the visual disconnect. */
+#rip.active .stage.v91Cinematic #v90InsideCards{
+  transform-origin:50% 14%!important;
+}
+#rip.active .stage.v91Cinematic #v90InsideCards.v91Emerge{
+  animation:v209CardsEmerge .72s cubic-bezier(.14,.84,.18,1) both!important;
+}
+@keyframes v209CardsEmerge{
+  0%{opacity:0;transform:translateY(38px) scale(.88)}
+  40%{opacity:1;transform:translateY(10px) scale(.97)}
+  100%{opacity:1;transform:translateY(-6px) scale(1)}
+}
+
+/* Brief soft highlight at rip completion; contained to the pack stage. */
+#rip.active .stage.v91Flash::after{
+  content:"";
+  position:absolute;
+  left:50%;top:49%;
+  width:min(320px,76vw);height:min(500px,58dvh);
+  transform:translate(-50%,-50%);
+  border-radius:38%;
+  pointer-events:none;
+  z-index:19;
+  background:radial-gradient(ellipse,rgba(255,255,255,.50),rgba(220,236,255,.16) 38%,rgba(255,255,255,0) 72%);
+  animation:v209StageFlash .62s ease-out both;
+}
+@keyframes v209StageFlash{0%{opacity:0;transform:translate(-50%,-50%) scale(.82)}35%{opacity:.75}100%{opacity:0;transform:translate(-50%,-50%) scale(1.12)}}
+
+@media(max-height:760px){
+  #rip.active #pack{width:min(216px,56vw)!important;height:min(390px,48dvh)!important}
+}
+</style>
+<script id="v209-premium-rip-polish-script">
+(()=>{try{
+  if(window.__v209PremiumRipPolish)return;window.__v209PremiumRipPolish=true;
+  const stamp=()=>{
+    const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');
+    if(row?.querySelector('b'))row.querySelector('b').textContent='V209 PREMIUM RIP POLISH';
+    const meta=document.querySelector('meta[name="tcg-cloud-build"]');
+    if(meta)meta.setAttribute('content','V209-premium-rip-polish');
+  };
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',stamp,{once:true});else stamp();
+}catch(err){console.error('V209 premium rip polish',err)}})();
+</script>
+
+
+<style id="v210-boot-stability-style">
+#bootSplashV104.v210ForceGone{opacity:0!important;visibility:hidden!important;pointer-events:none!important;display:none!important}
+</style>
+<script id="v210-boot-stability-script">
+(()=>{try{
+ if(window.__v210BootStability)return;window.__v210BootStability=true;
+ function dismissBoot(){const s=document.getElementById('bootSplashV104');if(!s)return;s.classList.add('hide','v210ForceGone');s.style.pointerEvents='none';setTimeout(()=>{try{s.remove()}catch(_e){}},80)}
+ function syncPackGeometry(){try{const pack=document.getElementById('pack'),guide=document.querySelector('#pack .tearGuide'),knob=document.getElementById('tear');if(!pack||!guide||!knob)return;const h=pack.getBoundingClientRect().height||0;if(!h)return;const y=h*.132;guide.style.setProperty('top',y+'px','important');knob.style.setProperty('top',(y-18)+'px','important')}catch(_e){}}
+ function stamp(){try{const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');if(row?.querySelector('b'))row.querySelector('b').textContent='V210 BOOT STABILITY FIX';const meta=document.querySelector('meta[name="tcg-cloud-build"]');if(meta)meta.setAttribute('content','V210-boot-stability-fix')}catch(_e){}}
+ function init(){stamp();syncPackGeometry();setTimeout(syncPackGeometry,120);setTimeout(syncPackGeometry,600);setTimeout(dismissBoot,1900);setTimeout(dismissBoot,2600)}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+ window.addEventListener('load',()=>setTimeout(dismissBoot,350),{once:true});
+ window.addEventListener('resize',syncPackGeometry,{passive:true});
+ window.visualViewport?.addEventListener('resize',syncPackGeometry,{passive:true});
+ document.addEventListener('pointerdown',e=>{if(e.target?.closest?.('#bootSplashV104'))dismissBoot()},{capture:true,passive:true});
+}catch(err){console.error('V210 boot stability',err)}})();
+</script>
+
+
+<style id="v211-pack-only-slider-fix">
+/* V211 — pack-only lighting + physically tracking cut slider. */
+#rip.active #pack{
+  --v211-cut-width:0%;
+}
+
+/* Remove the large pack-shell shimmer/halo completely. */
+#rip.active #pack::before,
+#rip.active #pack::after{
+  content:none!important;
+  display:none!important;
+  background:none!important;
+  box-shadow:none!important;
+  filter:none!important;
+  animation:none!important;
+}
+
+/* Only the real wrapper carries lighting, and it clips exactly to the pack bounds. */
+#rip.active #pack #foil{
+  overflow:hidden!important;
+  isolation:isolate!important;
+}
+#rip.active #pack #foil::before{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:4!important;
+  pointer-events:none!important;
+  background:
+    radial-gradient(circle at 24% 18%,rgba(255,255,255,.22),transparent 24%),
+    linear-gradient(180deg,rgba(255,255,255,.10),transparent 20%,transparent 78%,rgba(255,255,255,.06))!important;
+  mix-blend-mode:screen!important;
+  opacity:.58!important;
+}
+#rip.active #pack #foil::after{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  z-index:5!important;
+  pointer-events:none!important;
+  overflow:hidden!important;
+  background:linear-gradient(108deg,
+    transparent 28%,
+    rgba(255,255,255,.10) 36%,
+    rgba(255,255,255,.48) 44%,
+    rgba(184,221,255,.20) 49%,
+    rgba(255,213,248,.18) 53%,
+    rgba(255,255,255,.08) 58%,
+    transparent 68%)!important;
+  mix-blend-mode:screen!important;
+  opacity:.72!important;
+  animation:v211FoilSweep 3.15s ease-in-out infinite!important;
+  transform:translateX(-60%)!important;
+  filter:none!important;
+}
+@keyframes v211FoilSweep{
+  0%,10%{transform:translateX(-62%)}
+  62%,100%{transform:translateX(62%)}
+}
+
+/* Never duplicate the shimmer on detached tear pieces/top overlays. */
+#rip.active #pack #foilTop::before,
+#rip.active #pack #foilTop::after,
+#rip.active #pack .v142TearPiece::before,
+#rip.active #pack .v142TearPiece::after{
+  content:none!important;
+  display:none!important;
+}
+
+/* The cut rail is part of the pack, not a background element. */
+#rip.active #pack .tearGuide{
+  top:13.2%!important;
+  left:0!important;
+  right:0!important;
+  width:100%!important;
+  height:2px!important;
+  border-radius:999px!important;
+  background:rgba(245,249,255,.74)!important;
+  box-shadow:0 0 5px rgba(255,255,255,.20)!important;
+  overflow:hidden!important;
+  opacity:.92!important;
+}
+#rip.active #pack .tearGuide::before{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  left:0!important;
+  top:0!important;
+  bottom:0!important;
+  width:var(--v211-cut-width)!important;
+  border-radius:inherit!important;
+  background:linear-gradient(90deg,#ffffff,#d7e9ff 55%,#e4d5ff)!important;
+  box-shadow:0 0 8px rgba(204,222,255,.42)!important;
+}
+#rip.active #pack .tearGuide::after{content:none!important;display:none!important}
+
+/* Important: this stays visually movable; JS updates left with !important too. */
+#rip.active #pack .tearKnob{
+  left:-18px!important;
+  top:calc(13.2% - 19px)!important;
+  width:38px!important;
+  height:38px!important;
+  z-index:90!important;
+  pointer-events:none!important;
+  transition:none!important;
+  will-change:left,transform!important;
+  background:linear-gradient(180deg,rgba(255,255,255,.99),rgba(242,247,253,.96))!important;
+  border:1px solid rgba(255,255,255,1)!important;
+  color:#34425a!important;
+  box-shadow:0 7px 16px rgba(42,53,77,.16),inset 0 1px 0 #fff!important;
+}
+#rip.active #pack.v91Grab .tearKnob{
+  transform:scale(1.025)!important;
+}
+
+/* Keep interaction surface on the pack itself only. */
+#rip.active #pack .packGestureOverlay{
+  inset:0!important;
+  background:none!important;
+  border:0!important;
+  box-shadow:none!important;
+  touch-action:none!important;
+}
+
+@media(max-height:760px){
+  #rip.active #pack #foil::after{animation-duration:3.45s!important}
+}
+</style>
+<script id="v211-pack-only-slider-script">
+(()=>{try{
+  if(window.__v211PackOnlySlider)return;window.__v211PackOnlySlider=true;
+  function stamp(){
+    const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');
+    if(row?.querySelector('b'))row.querySelector('b').textContent='V211 PACK-ONLY SLIDER FIX';
+    const meta=document.querySelector('meta[name="tcg-cloud-build"]');
+    if(meta)meta.setAttribute('content','V211-pack-only-slider-fix');
+  }
+  function resetVisual(){
+    const pack=document.getElementById('pack'),tear=document.getElementById('tear');
+    if(pack)pack.style.setProperty('--v211-cut-width','0%');
+    if(tear && !(typeof drag!=='undefined'&&drag))tear.style.setProperty('left','-18px','important');
+  }
+  const init=()=>{stamp();resetVisual();setTimeout(resetVisual,100);setTimeout(resetVisual,500)};
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+  window.addEventListener('resize',resetVisual,{passive:true});
+  window.visualViewport?.addEventListener('resize',resetVisual,{passive:true});
+}catch(err){console.error('V211 pack-only slider',err)}})();
+</script>
+
+
+<style id="v212-pack-shine-tenpack-style">
+/* V212 — no page shimmer. Moving foil light is clipped to the booster only.
+   10-pack mode keeps a real centre booster in front of the fan. */
+
+/* Remove legacy scene-wide light/shimmer pseudo-elements. */
+#rip.active #stage::before,
+#rip.active #stage::after{
+  content:none!important;
+  display:none!important;
+  background:none!important;
+  filter:none!important;
+  box-shadow:none!important;
+  animation:none!important;
+}
+
+/* Retire older wrapper pseudos now that the dedicated clipped sheen owns lighting. */
+#rip.active #pack #foil::before,
+#rip.active #pack #foil::after,
+#rip.active #pack #foilTop::before,
+#rip.active #pack #foilTop::after{
+  content:none!important;
+  display:none!important;
+  animation:none!important;
+  background:none!important;
+}
+
+/* Dedicated pack-bound lighting surface. */
+#rip.active #pack .v212PackSheen{
+  position:absolute!important;
+  inset:0!important;
+  z-index:32!important;
+  overflow:hidden!important;
+  pointer-events:none!important;
+  border-radius:5px!important;
+  opacity:1!important;
+  transform:translateZ(4px)!important;
+  isolation:isolate!important;
+}
+#rip.active #pack .v212PackSheen::before{
+  content:"";
+  position:absolute;
+  top:-18%;
+  bottom:-18%;
+  left:-72%;
+  width:52%;
+  pointer-events:none;
+  background:linear-gradient(100deg,
+    rgba(255,255,255,0) 0%,
+    rgba(255,255,255,.10) 24%,
+    rgba(255,255,255,.52) 43%,
+    rgba(190,228,255,.28) 51%,
+    rgba(255,214,250,.25) 58%,
+    rgba(255,255,255,.13) 66%,
+    rgba(255,255,255,0) 100%);
+  filter:blur(4px);
+  mix-blend-mode:screen;
+  transform:skewX(-13deg);
+  animation:v212PackSweep 2.75s cubic-bezier(.35,.08,.28,.98) infinite;
+}
+#rip.active #pack .v212PackSheen::after{
+  content:"";
+  position:absolute;
+  inset:0;
+  pointer-events:none;
+  background:
+    radial-gradient(circle at 27% 18%,rgba(255,255,255,.23),transparent 20%),
+    linear-gradient(90deg,rgba(255,255,255,.08),transparent 8%,transparent 91%,rgba(255,255,255,.06)),
+    linear-gradient(180deg,rgba(255,255,255,.10),transparent 15%,transparent 82%,rgba(255,255,255,.05));
+  mix-blend-mode:screen;
+  opacity:.82;
+}
+@keyframes v212PackSweep{
+  0%,12%{left:-72%;opacity:.18}
+  25%{opacity:.88}
+  63%{left:122%;opacity:.76}
+  78%,100%{left:122%;opacity:0}
+}
+
+/* Keep the sheen attached to the wrapper during interaction, then clear it for extraction. */
+#rip.active #pack.v91Grab .v212PackSheen::before{animation-duration:1.9s}
+#rip.active .stage.v91Cinematic #pack .v212PackSheen{opacity:.22!important}
+#rip.active .stage.cardModeV89 #pack .v212PackSheen{display:none!important}
+
+/* 10-pack scene: real centre booster + compact fan behind it. */
+#rip.active .stage.v114TenMode #pack{
+  display:block!important;
+  opacity:1!important;
+  visibility:visible!important;
+  pointer-events:auto!important;
+  z-index:34!important;
+  top:49%!important;
+  width:min(220px,56vw)!important;
+  height:min(398px,48dvh)!important;
+}
+#rip.active .stage.v114TenMode .v114TenLine{
+  display:block!important;
+  z-index:15!important;
+  width:min(390px,96vw)!important;
+  height:330px!important;
+  top:51%!important;
+  opacity:1!important;
+  pointer-events:none!important;
+}
+#rip.active .stage.v114TenMode .v114MiniPack{
+  width:70px!important;
+  height:110px!important;
+  margin:-55px 0 0 -35px!important;
+  border-radius:6px!important;
+  overflow:hidden!important;
+  opacity:.70!important;
+  filter:saturate(.92) brightness(.98)!important;
+  box-shadow:0 10px 18px rgba(42,53,78,.12)!important;
+}
+#rip.active .stage.v114TenMode .v114MiniPack:nth-child(1){transform:translateX(-142px) rotate(-15deg) translateY(24px)!important}
+#rip.active .stage.v114TenMode .v114MiniPack:nth-child(2){transform:translateX(-112px) rotate(-11deg) translateY(13px)!important}
+#rip.active .stage.v114TenMode .v114MiniPack:nth-child(3){transform:translateX(-83px) rotate(-8deg) translateY(6px)!important}
+#rip.active .stage.v114TenMode .v114MiniPack:nth-child(4){transform:translateX(-56px) rotate(-5deg) translateY(2px)!important}
+#rip.active .stage.v114TenMode .v114MiniPack:nth-child(5){transform:translateX(-32px) rotate(-2.5deg)!important}
+#rip.active .stage.v114TenMode .v114MiniPack:nth-child(6){transform:translateX(32px) rotate(2.5deg)!important}
+#rip.active .stage.v114TenMode .v114MiniPack:nth-child(7){transform:translateX(56px) rotate(5deg) translateY(2px)!important}
+#rip.active .stage.v114TenMode .v114MiniPack:nth-child(8){transform:translateX(83px) rotate(8deg) translateY(6px)!important}
+#rip.active .stage.v114TenMode .v114MiniPack:nth-child(9){transform:translateX(112px) rotate(11deg) translateY(13px)!important}
+#rip.active .stage.v114TenMode .v114MiniPack:nth-child(10){transform:translateX(142px) rotate(15deg) translateY(24px)!important}
+
+/* Fan packs get their own tiny clipped glint, never a page-sized glow. */
+#rip.active .stage.v114TenMode .v114MiniPack::after{
+  content:""!important;
+  display:block!important;
+  position:absolute!important;
+  inset:0!important;
+  background:linear-gradient(108deg,
+    transparent 28%,
+    rgba(255,255,255,.32) 46%,
+    rgba(205,230,255,.15) 52%,
+    transparent 68%)!important;
+  transform:translateX(-120%)!important;
+  animation:v212MiniSweep 3.4s ease-in-out infinite!important;
+  mix-blend-mode:screen!important;
+  pointer-events:none!important;
+}
+@keyframes v212MiniSweep{
+  0%,20%{transform:translateX(-120%)}
+  64%,100%{transform:translateX(120%)}
+}
+
+/* In 10-pack mode the same working centre slider rips all ten. */
+#rip.active .stage.v114TenMode #pack .tearGuide,
+#rip.active .stage.v114TenMode #pack .tearKnob{
+  opacity:1!important;
+  visibility:visible!important;
+}
+
+/* Once the batch rip fires, the centre pack exits with the fan instead of hanging around. */
+#rip.active .stage.v114TenRipping #pack{
+  pointer-events:none!important;
+  animation:v212TenCentreRip .70s cubic-bezier(.18,.8,.2,1) forwards!important;
+}
+@keyframes v212TenCentreRip{
+  0%{opacity:1;transform:translate(-50%,-50%) perspective(1000px) scale(1)}
+  46%{opacity:1;transform:translate(-50%,-52%) perspective(1000px) scale(1.035) rotateZ(-1deg)}
+  100%{opacity:0;transform:translate(-50%,-68%) perspective(1000px) scale(.90) rotateZ(4deg)}
+}
+
+@media(max-height:760px){
+  #rip.active .stage.v114TenMode #pack{
+    width:min(198px,53vw)!important;
+    height:min(360px,45dvh)!important;
+  }
+  #rip.active .stage.v114TenMode .v114TenLine{height:285px!important}
+  #rip.active .stage.v114TenMode .v114MiniPack{
+    width:62px!important;height:97px!important;margin:-48px 0 0 -31px!important;
+  }
+}
+</style>
+
+<script id="v212-pack-shine-tenpack-script">
+(()=>{try{
+  if(window.__v212PackShineTenPack)return;
+  window.__v212PackShineTenPack=true;
+
+  function ensureSheen(){
+    const pack=document.getElementById('pack');
+    if(!pack)return;
+    let sheen=pack.querySelector(':scope > .v212PackSheen');
+    if(!sheen){
+      sheen=document.createElement('div');
+      sheen.className='v212PackSheen';
+      sheen.setAttribute('aria-hidden','true');
+      const gesture=pack.querySelector('#packGesture');
+      if(gesture)pack.insertBefore(sheen,gesture);
+      else pack.appendChild(sheen);
+    }
+  }
+
+  function refreshTenFan(){
+    try{
+      if(typeof v114PackCount==='undefined'||v114PackCount!==10)return;
+      const line=document.getElementById('v114TenLine');
+      const main=document.getElementById('packArt');
+      if(!line||!main)return;
+      const src=main.currentSrc||main.src||'';
+      line.querySelectorAll('.v114MiniPack img').forEach(img=>{
+        if(src&&img.src!==src)img.src=src;
+        img.style.visibility='visible';
+        img.style.opacity='1';
+      });
+    }catch(_e){}
+  }
+
+  function stamp(){
+    const row=[...document.querySelectorAll('.settingsDataLineV158')]
+      .find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');
+    if(row?.querySelector('b'))row.querySelector('b').textContent='V212 PACK SHINE + TEN PACK';
+    const meta=document.querySelector('meta[name="tcg-cloud-build"]');
+    if(meta)meta.setAttribute('content','V212-pack-shine-ten-pack');
+  }
+
+  const init=()=>{
+    ensureSheen();
+    stamp();
+    refreshTenFan();
+    setTimeout(ensureSheen,100);
+    setTimeout(refreshTenFan,140);
+    setTimeout(refreshTenFan,550);
+  };
+
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});
+  else init();
+
+  document.getElementById('packArt')?.addEventListener('load',()=>setTimeout(refreshTenFan,0));
+  document.getElementById('v114PackMode')?.addEventListener('pointerdown',()=>setTimeout(refreshTenFan,60),true);
+  document.getElementById('sets')?.addEventListener('click',()=>[80,260,700].forEach(ms=>setTimeout(refreshTenFan,ms)),true);
+}catch(err){console.error('V212 pack shine + ten-pack',err)}})();
+</script>
+
+
+<style id="v213-performance-style">
+/* V213 — performance pass. Keep expensive effects off the compositor while the card is physically moving. */
+#rip.active #stack.v74Dragging .revealCard::before,
+#rip.active #stack.v74Dragging .revealCard::after,
+#rip.active #stack.v75Held .revealCard::before,
+#rip.active #stack.v75Held .revealCard::after{
+  animation-play-state:paused!important;
+}
+#rip.active #stack.v74Dragging,
+#rip.active #stack.v75Held,
+#rip.active .v76Under{
+  will-change:transform,opacity!important;
+}
+#rip.active #cardImg{will-change:auto!important}
+/* Off-screen collection images should not compete with the pack-opening screen for bandwidth. */
+#binder:not(.active) img,#bulk:not(.active) img,#profile:not(.active) img{content-visibility:auto}
+</style>
+<script id="v213-performance-script">
+(()=>{try{
+ if(window.__v213Performance)return;window.__v213Performance=true;
+
+ /* Warm the two hosts used constantly by the rip screen. */
+ ['https://assets.tcgdex.net','https://api.tcgdex.net','https://images.sealeddex.com'].forEach(h=>{
+   if(document.head.querySelector(`link[data-v213-preconnect="${h}"]`))return;
+   const l=document.createElement('link');l.rel='preconnect';l.href=h;l.crossOrigin='anonymous';l.dataset.v213Preconnect=h;document.head.appendChild(l);
+ });
+
+ const seenImages=new Set();
+ function preloadImg(src,priority='auto'){
+   if(!src||seenImages.has(src))return;
+   seenImages.add(src);
+   const im=new Image();im.decoding='async';try{im.fetchPriority=priority}catch(_e){}im.src=src;
+ }
+ window.v213PreloadImg=preloadImg;
+
+ function idle(fn,timeout=700){
+   if('requestIdleCallback' in window)return requestIdleCallback(fn,{timeout});
+   return setTimeout(fn,Math.min(timeout,220));
+ }
+
+ /* Pack art: begin the remote request immediately instead of waiting for IndexedDB first. */
+ const oldApplyPackArt=applyPackArt;
+ applyPackArt=async function(){
+   const target=sel, p=document.getElementById('pack'), im=document.getElementById('packArt');
+   if(!target||!p||!im)return oldApplyPackArt?.apply(this,arguments);
+   const url=(OFFICIAL_PACK_ART[target.id]||[])[0]||'';
+   packArtTry=0;p.classList.remove('artFallback');p.classList.add('officialPack');im.style.display='block';
+   if(!url){p.classList.remove('officialPack');p.classList.add('artFallback');return}
+   preloadImg(url,'high');
+   let settled=false;
+   const showRemote=()=>{if(sel.id!==target.id||settled)return;settled=true;im.onerror=()=>{im.onerror=null;p.classList.remove('officialPack');p.classList.add('artFallback')};im.onload=()=>{im.onload=null;idle(()=>cachePack(target.id,url),1300);try{window.refreshTenFanV212?.()}catch(_e){}};im.src=url};
+   getCachedPack(target.id).then(blob=>{
+     if(sel.id!==target.id||settled)return;
+     if(blob){settled=true;if(packObjectURL){try{URL.revokeObjectURL(packObjectURL)}catch(_e){}}packObjectURL=URL.createObjectURL(blob);im.onerror=null;im.onload=()=>{try{window.refreshTenFanV212?.()}catch(_e){}};im.src=packObjectURL}
+     else showRemote();
+   }).catch(showRemote);
+   /* Do not leave the pack blank while a slow IndexedDB transaction is deciding. */
+   setTimeout(showRemote,45);
+ };
+
+ function preloadNearbyPacks(){
+   try{
+     const i=SETS.findIndex(s=>s.id===sel.id);
+     [i-1,i+1,i+2].map(n=>SETS[n]).filter(s=>s&&setUnlocked(s)).forEach(s=>preloadImg((OFFICIAL_PACK_ART[s.id]||[])[0]));
+   }catch(_e){}
+ }
+
+ /* Smart pack warming: no 40 card-detail calls during a 10-pack generation. */
+ warmPack=function(out){
+   out=Array.isArray(out)?out:[];
+   if(!out.length)return out;
+   const ten=(typeof v114PackCount!=='undefined'&&v114PackCount===10);
+   /* v114MakeBatch calls makePack ten times. Skip the ten temporary 10-card warmups. */
+   if(ten&&out.length===10)return out;
+   const limit=ten?Math.min(16,out.length):Math.min(10,out.length);
+   for(let i=0;i<limit;i++)preloadImg(out[i]?.thumb||out[i]?.img,i<4?'high':'auto');
+   /* Detail/pricing requests are background work now, prioritising hits only. */
+   idle(()=>{
+     out.slice(0,ten?8:5).filter(c=>c&&(tier(c)>=2||c.secret)).forEach((c,i)=>setTimeout(()=>hydrateCard(c).catch(()=>{}),i*80));
+   },900);
+   return out;
+ };
+
+ function preloadWindow(from,count=7){
+   for(let j=from;j<Math.min(pulls.length,from+count);j++){
+     const c=pulls[j];if(!c)continue;
+     preloadImg(c.thumb||c.img,j<from+3?'high':'auto');
+     if(j<from+2&&(tier(c)>=2||c.secret))idle(()=>hydrateCard(c).catch(()=>{}),800);
+   }
+ }
+
+ /* Reveal immediately from the set checklist thumbnail. Card-detail hydration can finish later. */
+ showBack=function(autoReveal=false){
+   const c=pulls[idx],img=document.getElementById('cardImg'),st=document.getElementById('stack');if(!c||!img||!st)return;
+   st.className='cardStack show faceVisible flipped';st.style.transform='';st.style.opacity='1';st.dataset.faceReady='0';
+   document.getElementById('stage').className='stage cardModeV89';document.getElementById('rarityBanner')?.classList.remove('show');document.getElementById('meta')?.classList.remove('show','hitDecision','flowOut');
+   const counter=document.getElementById('counter');if(counter)counter.textContent=v114PackCount===10?`${Math.floor(idx/10)+1} / 10`:`${idx+1} / ${pulls.length}`;
+   const instr=document.getElementById('instruction');if(instr)instr.textContent=v114PackCount===10?'Swipe through all 100 cards':'Swipe the card away to continue';
+   const chip=document.getElementById('v74RouteChip');if(chip){chip.classList.remove('show');chip.textContent=''};
+
+   const immediate=c.thumb||c.img||'';
+   let fxDone=false;
+   const runFx=()=>{if(fxDone)return;fxDone=true;st.dataset.faceReady='1';requestAnimationFrame(()=>{if(typeof v128PlayHero==='function'&&v128PlayHero(c)){try{sfxV67('card')}catch(_e){}}else applyRevealEffects(c,st)})};
+   img.onload=runFx;img.onerror=runFx;
+   if(immediate){if(img.src!==immediate)img.src=immediate;if(img.complete&&img.naturalWidth)runFx()}else runFx();
+
+   const bulk=isBulkCardV64(c);if(chip){chip.textContent=bulk?'🗃️ AUTO → BULK TUB':'📘 AUTO → BINDER';chip.classList.add('show');setTimeout(()=>chip.classList.remove('show'),650)}
+   preloadWindow(idx+1,8);
+   updatePeekLayersV76();
+
+   /* High-res/detail data upgrades quietly and never block the swipe. */
+   idle(async()=>{
+     try{
+       await hydrateCard(c);
+       if(!pulls[idx]||pulls[idx].id!==c.id)return;
+       const hi=c.img||'';if(!hi||hi===img.src)return;
+       const up=new Image();up.decoding='async';up.onload=()=>{if(pulls[idx]?.id===c.id)img.src=hi};up.src=hi;
+     }catch(_e){}
+   },1100);
+ };
+
+ /* Collection saves are debounced; expensive hidden-screen rerenders are not done on every single swipe. */
+ let saveTimer=0,dirty=false;
+ function scheduleSave(){dirty=true;clearTimeout(saveTimer);saveTimer=setTimeout(flushSave,420)}
+ function flushSave(){clearTimeout(saveTimer);saveTimer=0;if(!dirty)return;dirty=false;try{save()}catch(_e){}}
+ window.v213FlushSave=flushSave;
+
+ autoCollectV74=function(c){
+   if(!c||window.v74CollectLock)return false;window.v74CollectLock=true;awardChase(c);
+   if(isBulkCardV64(c)){addToBulkV64(c);try{sfxEventV70('bulkDrop')}catch(_e){}}
+   else{addToBinderV64(c);try{sfxEventV70('binder')}catch(_e){}}
+   scheduleSave();return true;
+ };
+
+ const oldDecide=decide;
+ decide=function(keep){
+   if(!keep)return oldDecide.apply(this,arguments);
+   if(window.decisionLock)return;const c=pulls[idx];if(!c)return;window.decisionLock=true;awardChase(c);
+   if(isBulkCardV64(c)){addToBulkV64(c);try{sfxEventV70('bulkDrop')}catch(_e){}}else{addToBinderV64(c);try{sfxEventV70('binder')}catch(_e){}}
+   scheduleSave();const st=document.getElementById('stack');document.getElementById('meta')?.classList.add('flowOut');st?.classList.add('decisionOutKeep');
+   if(navigator.vibrate)navigator.vibrate(8);setTimeout(()=>{window.decisionLock=false;document.getElementById('meta')?.classList.remove('flowOut','hitDecision');advance(true)},110);
+ };
+
+ /* Don't build image-heavy hidden screens while a pack is being ripped. */
+ const rawRenderBinder=renderBinder;
+ renderBinder=function(){
+   if(document.getElementById('rip')?.classList.contains('active')&&!document.getElementById('binder')?.classList.contains('active'))return;
+   return rawRenderBinder.apply(this,arguments);
+ };
+ const rawRenderBulk=window.renderBulkV64;
+ if(typeof rawRenderBulk==='function')window.renderBulkV64=function(){
+   if(document.getElementById('rip')?.classList.contains('active')&&!document.getElementById('bulk')?.classList.contains('active'))return;
+   return rawRenderBulk.apply(this,arguments);
+ };
+ const rawRenderMaster=window.renderMasterV57;
+ if(typeof rawRenderMaster==='function')window.renderMasterV57=function(){if(document.getElementById('rip')?.classList.contains('active')&&busy)return;return rawRenderMaster.apply(this,arguments)};
+ const rawRenderMarket=window.renderMarketV57;
+ if(typeof rawRenderMarket==='function')window.renderMarketV57=function(){if(document.getElementById('rip')?.classList.contains('active')&&busy)return;return rawRenderMarket.apply(this,arguments)};
+
+ const rawSummary=showPackSummaryV88;
+ showPackSummaryV88=function(best){flushSave();const r=rawSummary.apply(this,arguments);idle(()=>{try{renderSets()}catch(_e){}},700);return r};
+
+ /* 10-pack generation: suppress repeated full save work; flush once after the batch exists. */
+ const rawSave=save,rawBatch=v114MakeBatch;
+ let batchSaving=false;
+ save=function(){if(batchSaving){dirty=true;return}return rawSave.apply(this,arguments)};
+ v114MakeBatch=async function(){batchSaving=true;try{return await rawBatch.apply(this,arguments)}finally{batchSaving=false;dirty=true;flushSave()}};
+
+ document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='hidden')flushSave()});
+ window.addEventListener('pagehide',flushSave,{capture:true});
+
+ function stamp(){
+   const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');
+   if(row?.querySelector('b'))row.querySelector('b').textContent='V213 PERFORMANCE BOOST';
+   const meta=document.querySelector('meta[name="tcg-cloud-build"]');if(meta)meta.setAttribute('content','V213-performance-boost');
+ }
+ const init=()=>{stamp();preloadNearbyPacks();setTimeout(preloadNearbyPacks,900)};
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+ document.getElementById('sets')?.addEventListener('click',()=>setTimeout(preloadNearbyPacks,180),true);
+}catch(err){console.error('V213 performance boost',err)}})();
+</script>
+
+
+<style id="v214-exact-hit-art-style">
+/* V214 — never show the previous hit while the next hero image is loading. */
+#v128Hero.v214Preparing{opacity:0!important;visibility:hidden!important;pointer-events:none!important}
+#v128Hero #v128HeroImg{background:transparent!important}
+</style>
+<script id="v214-exact-hit-art-script">
+(()=>{try{
+  if(window.__v214ExactHitArt)return;window.__v214ExactHitArt=true;
+  const hero=document.getElementById('v128Hero');
+  const heroImg=document.getElementById('v128HeroImg');
+  const rare=document.getElementById('v128HeroRare');
+  const meta=document.getElementById('v128HeroMeta');
+  if(!hero||!heroImg)return;
+
+  let revealSerial=0;
+  let closeTimer=0,infoTimer=0;
+  const transparent='data:image/gif;base64,R0lGODlhAQABAAD/ACwAAAAAAQABAAACADs=';
+  const cardKey=c=>`${c?.id||''}|${c?.set||''}|${c?.number||''}|${c?.name||''}`;
+
+  function cleanHero(){
+    clearTimeout(closeTimer);clearTimeout(infoTimer);
+    hero.className='';
+    hero.removeAttribute('data-card-key');
+    document.body.classList.remove('v128Hero');
+    window.v128HeroPlaying=false;
+  }
+
+  function launchExact(c,t,serial,src){
+    if(serial!==revealSerial||!window.v128HeroPlaying)return;
+    const key=cardKey(c);
+    if(hero.dataset.cardKey!==key)return;
+    let r=String(c.rarity||'SPECIAL HIT').toUpperCase();
+    if(rare)rare.textContent=r;
+    if(meta)meta.textContent=`${c.name} · #${c.number}${c.market>0?' · $'+Number(c.market).toFixed(2):''}`;
+    hero.className='on'+(t>=5||c.secret?' chase v145Hyper':'');
+    document.body.classList.add('v128Hero');
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      if(serial!==revealSerial||hero.dataset.cardKey!==key)return;
+      hero.classList.add('play');
+      try{hitSound(Math.min(5,t))}catch(_e){}
+      try{navigator.vibrate?.(t>=5?[24,45,38,55,70]:[18,28,30])}catch(_e){}
+    }));
+    infoTimer=setTimeout(()=>{if(serial===revealSerial&&hero.dataset.cardKey===key)hero.classList.add('info')},900);
+    closeTimer=setTimeout(()=>{
+      if(serial!==revealSerial||hero.dataset.cardKey!==key)return;
+      cleanHero();
+      try{updateAudioV68()}catch(_e){}
+    },2200);
+  }
+
+  window.v128PlayHero=function(c){
+    if(!c||window.v128HeroPlaying)return false;
+    const t=typeof tier==='function'?tier(c):0;
+    if(t<3&&!c.secret)return false;
+
+    const src=String(c.img||c.thumb||'');
+    if(!src)return false; // never reuse whatever happened to be in the hero image
+
+    window.v128HeroPlaying=true;
+    window.v124RareLockUntil=Date.now()+2600;
+    const serial=++revealSerial;
+    const key=cardKey(c);
+    hero.dataset.cardKey=key;
+    hero.className='v214Preparing';
+    document.body.classList.remove('v128Hero');
+
+    /* Blank the actual hero element first so stale pixels can never flash. */
+    try{heroImg.removeAttribute('src')}catch(_e){}
+    heroImg.src=transparent;
+
+    const pre=new Image();
+    pre.decoding='async';
+    let settled=false;
+    const ready=async()=>{
+      if(settled)return;settled=true;
+      if(serial!==revealSerial||hero.dataset.cardKey!==key)return;
+      try{if(pre.decode)await pre.decode()}catch(_e){}
+      if(serial!==revealSerial||hero.dataset.cardKey!==key)return;
+      heroImg.src=src;
+      heroImg.dataset.cardKey=key;
+      /* Wait one paint with the exact new bitmap assigned before exposing the cinematic. */
+      requestAnimationFrame(()=>requestAnimationFrame(()=>launchExact(c,t,serial,src)));
+    };
+    pre.onload=ready;
+    pre.onerror=()=>{
+      if(settled)return;settled=true;
+      /* If the high image fails, try the thumbnail only if it is a different URL. */
+      const fallback=String(c.thumb||'');
+      if(fallback&&fallback!==src&&serial===revealSerial){
+        const fb=new Image();fb.decoding='async';fb.onload=async()=>{
+          if(serial!==revealSerial||hero.dataset.cardKey!==key)return;
+          try{if(fb.decode)await fb.decode()}catch(_e){}
+          heroImg.src=fallback;heroImg.dataset.cardKey=key;
+          requestAnimationFrame(()=>requestAnimationFrame(()=>launchExact(c,t,serial,fallback)));
+        };
+        fb.onerror=()=>{if(serial===revealSerial)cleanHero()};
+        fb.src=fallback;
+      }else if(serial===revealSerial)cleanHero();
+    };
+    pre.src=src;
+    return true;
+  };
+
+  /* Clear any stale cinematic if a new pack/reset forcibly changes scenes. */
+  const stage=document.getElementById('stage');
+  if(stage)new MutationObserver(()=>{
+    if(window.v128HeroPlaying&&stage.classList.contains('v91Cinematic')){
+      revealSerial++;cleanHero();
+    }
+  }).observe(stage,{attributes:true,attributeFilter:['class']});
+
+  const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');
+  if(row?.querySelector('b'))row.querySelector('b').textContent='V214 EXACT HIT ART';
+  const metaBuild=document.querySelector('meta[name="tcg-cloud-build"]');
+  if(metaBuild)metaBuild.setAttribute('content','V214-exact-hit-art');
+}catch(err){console.error('V214 exact hit art',err)}})();
+</script>
+
+
+<style id="v215-instant-set-switch-style">
+/* V215 — fast, satisfying set switching. No full carousel rebuild on every tap. */
+#rip.active #sets .set{
+  transition:transform 105ms cubic-bezier(.2,.9,.25,1),opacity 105ms ease,background 105ms ease,box-shadow 105ms ease!important;
+  will-change:transform,opacity;
+}
+#rip.active #sets .set.selected{
+  transition-duration:120ms!important;
+}
+#rip.active #sets .set.v215SetTap{
+  animation:v215SetTap 170ms cubic-bezier(.18,.9,.24,1)!important;
+}
+@keyframes v215SetTap{
+  0%{transform:scale(.92)}
+  48%{transform:scale(1.055)}
+  100%{transform:scale(1)}
+}
+#rip.active #packArt{
+  transition:opacity 80ms ease,filter 100ms ease,transform 120ms cubic-bezier(.2,.85,.24,1)!important;
+  will-change:opacity,filter,transform;
+}
+#rip.active #pack.v215SetChanging #packArt{
+  opacity:.58!important;
+  filter:saturate(.88) brightness(1.06)!important;
+  transform:translateZ(1px) scale(.985)!important;
+}
+#rip.active #packArt.v215SetPop{
+  animation:v215PackPop 165ms cubic-bezier(.18,.9,.22,1)!important;
+}
+@keyframes v215PackPop{
+  0%{opacity:.66;transform:translateZ(1px) scale(.975)}
+  58%{opacity:1;transform:translateZ(1px) scale(1.018)}
+  100%{opacity:1;transform:translateZ(1px) scale(1)}
+}
+/* Tiny tactile flash on successful selection; never blocks taps. */
+#rip.active #pack.v215SetChanged::marker{display:none}
+#rip.active #sets .set.v215SelectedFlash::after{
+  content:"";
+  position:absolute;
+  inset:2px;
+  border-radius:inherit;
+  pointer-events:none;
+  box-shadow:inset 0 0 0 1px rgba(255,255,255,.82),0 0 18px rgba(153,132,255,.20);
+  animation:v215SelectedFlash 190ms ease-out forwards;
+}
+@keyframes v215SelectedFlash{from{opacity:1}to{opacity:0}}
+</style>
+<script id="v215-instant-set-switch-script">
+(()=>{try{
+ if(window.__v215InstantSetSwitch)return;window.__v215InstantSetSwitch=true;
+
+ const packWarm=new Map();
+ const logoWarm=new Set();
+ let switchSerial=0;
+ let warmAllStarted=false;
+
+ function packUrlFor(s){return s?((OFFICIAL_PACK_ART[s.id]||[])[0]||''):''}
+ function warmImage(url,priority='auto'){
+   if(!url)return Promise.resolve(false);
+   if(packWarm.has(url))return packWarm.get(url).promise;
+   let resolve;
+   const promise=new Promise(r=>resolve=r);
+   const im=new Image();
+   try{im.decoding='async';im.fetchPriority=priority}catch(_e){}
+   const entry={im,promise,ready:false,ok:false};packWarm.set(url,entry);
+   const done=ok=>{entry.ready=true;entry.ok=ok;resolve(ok)};
+   im.onload=()=>done(true);im.onerror=()=>done(false);im.src=url;
+   if(im.complete&&im.naturalWidth)done(true);
+   return promise;
+ }
+ function warmLogo(s){
+   if(!s)return;const u=logo(s);if(!u||logoWarm.has(u))return;logoWarm.add(u);
+   const im=new Image();im.decoding='async';im.src=u;
+ }
+ function warmSet(s,priority='auto'){
+   if(!s||!setUnlocked(s))return;
+   warmImage(packUrlFor(s),priority);warmLogo(s);
+ }
+ function orderedSets(){
+   return [...SETS].map((s,i)=>({s,i})).sort((a,b)=>(Number(a.s.unlock||99)-Number(b.s.unlock||99))||(a.i-b.i)).map(x=>x.s);
+ }
+ function warmAround(s){
+   const a=orderedSets(),i=a.findIndex(x=>x.id===s?.id);if(i<0)return;
+   [0,-1,1,-2,2,-3,3].forEach((off,n)=>{const x=a[i+off];if(x)warmSet(x,n<3?'high':'auto')});
+ }
+ function warmAllUnlocked(){
+   if(warmAllStarted)return;warmAllStarted=true;
+   const a=orderedSets().filter(s=>setUnlocked(s));let i=0;
+   const next=()=>{if(i>=a.length)return;warmSet(a[i++]);setTimeout(next,90)};
+   setTimeout(next,350);
+ }
+
+ function paintTenFan(url){
+   if(!url)return;
+   document.querySelectorAll('#v114TenLine .v114MiniPack img').forEach(img=>{
+     if(img.getAttribute('src')!==url)img.src=url;
+     img.style.visibility='visible';img.style.opacity='1';
+   });
+ }
+
+ /* Perceived-instant art swap: keep the old booster on screen while the new image finishes. */
+ const previousApply=applyPackArt;
+ applyPackArt=function(){
+   const target=sel,pack=document.getElementById('pack'),img=document.getElementById('packArt');
+   if(!target||!pack||!img)return previousApply?.apply(this,arguments);
+   const url=packUrlFor(target),token=++switchSerial,setId=target.id;
+   if(!url)return previousApply?.apply(this,arguments);
+   pack.dataset.packArtSet=setId;pack.classList.add('officialPack','v215SetChanging');pack.classList.remove('artFallback');
+   img.style.display='block';
+   warmSet(target,'high');warmAround(target);
+   const commit=()=>{
+     if(token!==switchSerial||sel?.id!==setId)return;
+     const entry=packWarm.get(url);
+     if(entry&&!entry.ok&&entry.ready){pack.classList.remove('v215SetChanging');previousApply?.call(window);return}
+     img.onerror=()=>{if(token!==switchSerial)return;pack.classList.remove('v215SetChanging');previousApply?.call(window)};
+     img.onload=()=>{
+       if(token!==switchSerial||sel?.id!==setId)return;
+       pack.classList.remove('v215SetChanging');
+       img.classList.remove('v215SetPop');void img.offsetWidth;img.classList.add('v215SetPop');
+       paintTenFan(url);
+       setTimeout(()=>img.classList.remove('v215SetPop'),190);
+     };
+     if(img.currentSrc===url||img.src===url){pack.classList.remove('v215SetChanging');paintTenFan(url);return}
+     img.src=url;
+     if(img.complete&&img.naturalWidth)img.onload?.();
+   };
+   const e=packWarm.get(url);
+   if(e?.ready&&e.ok){commit();return Promise.resolve()}
+   /* If browser cache already has it, this usually resolves in the same frame. */
+   warmImage(url,'high').then(()=>commit());
+   /* Do not leave an old image dimmed if the network is genuinely slow. */
+   setTimeout(()=>{if(token===switchSerial)pack.classList.remove('v215SetChanging')},260);
+   return Promise.resolve();
+ };
+
+ function setTileSelected(tile,s){
+   const rail=document.getElementById('sets');if(!rail)return;
+   rail.querySelectorAll('.set.selected').forEach(x=>{if(x!==tile)x.classList.remove('selected')});
+   tile.classList.add('selected','v215SetTap','v215SelectedFlash');
+   setTimeout(()=>tile.classList.remove('v215SetTap','v215SelectedFlash'),210);
+   /* Centre quickly without waiting for the browser's long smooth-scroll animation. */
+   const rr=rail.getBoundingClientRect(),tr=tile.getBoundingClientRect();
+   const delta=(tr.left+tr.width/2)-(rr.left+rr.width/2);
+   if(Math.abs(delta)>2)rail.scrollBy({left:delta,behavior:'auto'});
+ }
+ function backgroundWarmCards(s){
+   const run=()=>{try{getSet(s).catch(()=>{})}catch(_e){}};
+   if('requestIdleCallback' in window)requestIdleCallback(run,{timeout:700});else setTimeout(run,160);
+ }
+ function fastSelect(s,tile){
+   if(!s||busy)return;
+   if(!setUnlocked(s)){showSetRequirements(s);return}
+   if(sel?.id===s.id){setTileSelected(tile,s);warmAround(s);return}
+   sel=s;
+   setTileSelected(tile,s);
+   /* resetPack is local-only and cheap; run immediately so the UI never feels stuck. */
+   resetPack();
+   applyPackArt();
+   warmAround(s);
+   backgroundWarmCards(s);
+   try{navigator.vibrate?.(6)}catch(_e){}
+ }
+
+ /* Intercept before the legacy tile onclick, which rebuilds every set card + Master progress. */
+ const rail=document.getElementById('sets');
+ if(rail){
+   rail.addEventListener('click',e=>{
+     const tile=e.target.closest('.set[data-set-id]');
+     if(!tile||e.target.closest('.setReqBtn'))return;
+     const s=SETS.find(x=>x.id===tile.dataset.setId);if(!s)return;
+     e.preventDefault();e.stopImmediatePropagation();
+     fastSelect(s,tile);
+   },true);
+   rail.addEventListener('pointerdown',e=>{
+     const tile=e.target.closest('.set[data-set-id]');if(!tile)return;
+     const s=SETS.find(x=>x.id===tile.dataset.setId);if(s)warmSet(s,'high');
+   },{capture:true,passive:true});
+   let scrollTimer=0;
+   rail.addEventListener('scroll',()=>{
+     clearTimeout(scrollTimer);scrollTimer=setTimeout(()=>{
+       const rr=rail.getBoundingClientRect();
+       [...rail.querySelectorAll('.set[data-set-id]')].filter(t=>{const r=t.getBoundingClientRect();return r.right>rr.left-130&&r.left<rr.right+130}).forEach(t=>{
+         const s=SETS.find(x=>x.id===t.dataset.setId);if(s)warmSet(s);
+       });
+     },60);
+   },{passive:true});
+ }
+
+ function stamp(){
+   const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');
+   if(row?.querySelector('b'))row.querySelector('b').textContent='V215 INSTANT SET SWITCH';
+   const meta=document.querySelector('meta[name="tcg-cloud-build"]');if(meta)meta.setAttribute('content','V215-instant-set-switch');
+ }
+ function init(){stamp();warmAround(sel);warmAllUnlocked();setTimeout(()=>warmAround(sel),120)}
+ if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
+}catch(err){console.error('V215 instant set switch',err)}})();
+</script>
+
 </body></html>
