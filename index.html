@@ -10004,6 +10004,9 @@ try{
   state.specialStatsV198=state.specialStatsV198||{godPacks:0,godBySet:{}};
   state.specialStatsV198.godBySet=state.specialStatsV198.godBySet||{};
   let filterV198='all',unlockQueueV198=[],unlockShowingV198=false,checkingV198=false;
+  const iosSpecialV217=(()=>{try{return /iP(hone|ad|od)/i.test(navigator.userAgent||'')||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1)}catch(_e){return false}})();
+  const specialBatchSizeV217=iosSpecialV217?4:8;
+  let specialShownV217=specialBatchSizeV217;
   const escV198=s=>String(s==null?'':s).replace(/[&<>"']/g,m=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[m]));
   const completedAchievementsV198=()=>{try{updateBadges()}catch(_e){}return ACHIEVEMENTS.filter(a=>state.achievements?.[a[0]]).length};
   const masterCountV198=()=>SETS.filter(s=>{try{let p=masterProgressV58(s);return p.total>0&&p.n>=p.total}catch(_e){return false}}).length;
@@ -10055,7 +10058,19 @@ try{
   function fxMarkupV198(){return '<span class="specialFoilV198"></span><span class="specialDamascusV198"></span><span class="specialSparkV198"></span><span class="specialLightV198"></span>'}
   function tileV198(card){
     const owned=isOwnedV198(card.id),p=progressV198(card),rar=card.rarity==='Prismatic Rare'?'prismatic':'mythical';
-    return `<button type="button" class="specialTileV198 ${rar} ${owned?'owned':'locked'}" data-special-card-v198="${card.id}"><span class="specialRarityChipV198">${escV198(card.rarity).toUpperCase()}</span><span class="specialLockChipV198">${owned?'OWNED':'LOCKED'}</span><div class="specialCardFrameV198"><img src="${card.art}" alt="${escV198(card.name)}">${fxMarkupV198()}</div><div class="specialTileBodyV198"><b>${escV198(card.name)}</b><small>${escV198(card.group)} • ${escV198(card.subtitle)}</small><div class="specialTileProgressV198"><span>${owned?(state.specialCollectionV198.owned[card.id]?.via||'Unlocked'):unlockTextV198(card)}</span><strong>${owned?'✓':`${Math.min(p.value,p.target)}/${p.target}`}</strong></div><div class="specialMiniTrackV198"><i style="width:${owned?100:p.pct}%"></i></div></div></button>`;
+    return `<button type="button" class="specialTileV198 ${rar} ${owned?'owned':'locked'}" data-special-card-v198="${card.id}"><span class="specialRarityChipV198">${escV198(card.rarity).toUpperCase()}</span><span class="specialLockChipV198">${owned?'OWNED':'LOCKED'}</span><div class="specialCardFrameV198"><img data-v217-special-img="${card.id}" loading="lazy" decoding="async" alt="${escV198(card.name)}">${fxMarkupV198()}</div><div class="specialTileBodyV198"><b>${escV198(card.name)}</b><small>${escV198(card.group)} • ${escV198(card.subtitle)}</small><div class="specialTileProgressV198"><span>${owned?(state.specialCollectionV198.owned[card.id]?.via||'Unlocked'):unlockTextV198(card)}</span><strong>${owned?'✓':`${Math.min(p.value,p.target)}/${p.target}`}</strong></div><div class="specialMiniTrackV198"><i style="width:${owned?100:p.pct}%"></i></div></div></button>`;
+  }
+  function hydrateSpecialImagesV217(root){
+    if(!root||!root.closest('.specialsPanelV198.active'))return;
+    const imgs=[...root.querySelectorAll('img[data-v217-special-img]:not([src])')];
+    imgs.forEach((img,i)=>{
+      const id=img.dataset.v217SpecialImg,card=SPECIAL_CARDS_V198.find(c=>c.id===id);if(!card)return;
+      setTimeout(()=>{try{if(!img.isConnected||!img.closest('.specialsPanelV198.active'))return;img.src=card.art}catch(_e){}},iosSpecialV217?i*85:i*24);
+    });
+  }
+  function releaseSpecialImagesV217(){
+    if(!iosSpecialV217)return;
+    document.querySelectorAll('#specialGridV198 img[data-v217-special-img]').forEach(img=>{try{img.removeAttribute('src')}catch(_e){}});
   }
   function filteredCardsV198(){if(filterV198==='duplicates')return [];return SPECIAL_CARDS_V198.filter(c=>filterV198==='all'||filterV198==='mythical'&&c.rarity==='Mythical Rare'||filterV198==='prismatic'&&c.rarity==='Prismatic Rare'||filterV198==='promos'||filterV198==='owned'&&isOwnedV198(c.id)||filterV198==='locked'&&!isOwnedV198(c.id))}
   function ensureBinderSpecialsV198(){
@@ -10066,15 +10081,24 @@ try{
       panel.innerHTML=`<section class="specialHeroV198"><div class="specialHeroTopV198"><div class="specialHeroCopyV198"><small>SPECIAL COLLECTION</small><h2>Mythical & Prismatic Vault</h2><p>Nineteen user-selected custom cards live outside the normal set checklist. Earn them through levels, achievements, Master Sets, God Packs, streaks, trades and grading — or hit a rare Prismatic Vault bonus route.</p></div><div class="specialHeroCountV198"><small>COLLECTED</small><b id="specialCountV198">0 / 19</b></div></div><div class="specialProgressV198"><i id="specialFillV198"></i></div><div class="specialStatsV198"><div><small>MYTHICAL</small><b id="specialMythicalV198">0 / 9</b></div><div><small>PRISMATIC</small><b id="specialPrismaticV198">0 / 10</b></div><div><small>GOD PACKS</small><b id="specialGodPacksV198">0</b></div></div></section><section class="prismaticVaultV198"><div class="prismaticVaultHeadV198"><div><small>BONUS ACQUISITION ROUTE</small><h3>Prismatic Vault</h3></div><span class="prismaticVaultKeyV198" id="specialVaultKeysV198">0 KEYS</span></div><p>Every 250 packs opened or every 2 God Packs grants a Vault key. A key unlocks one random unowned Prismatic Rare — an alternate path alongside each card’s dedicated challenge.</p><button type="button" id="specialOpenVaultV198">OPEN PRISMATIC VAULT</button></section><div class="specialFiltersV198" id="specialFiltersV198"><button class="active" data-special-filter-v198="all">ALL</button><button data-special-filter-v198="sets">SETS</button><button data-special-filter-v198="mythical">MYTHICAL</button><button data-special-filter-v198="prismatic">PRISMATIC</button><button data-special-filter-v198="promos">PROMOS</button><button data-special-filter-v198="owned">OWNED</button><button data-special-filter-v198="locked">LOCKED</button><button data-special-filter-v198="duplicates">DUPLICATES</button></div><div class="specialGridV198" id="specialGridV198"></div>`;
       const filterSheet=binder.querySelector('.binderFilterSheetV147');binder.insertBefore(panel,filterSheet||null);
       panel.querySelector('#specialOpenVaultV198').addEventListener('click',openVaultV198);
-      panel.querySelector('#specialFiltersV198').addEventListener('click',e=>{const b=e.target.closest('[data-special-filter-v198]');if(!b)return;filterV198=b.dataset.specialFilterV198;if(filterV198==='sets'){window.setBinderModeV147?.('binder');return}renderSpecialCollectionV198()});
-      panel.querySelector('#specialGridV198').addEventListener('click',e=>{const b=e.target.closest('[data-special-card-v198]');if(b)openSpecialCardV198(b.dataset.specialCardV198)});
+      panel.querySelector('#specialFiltersV198').addEventListener('click',e=>{const b=e.target.closest('[data-special-filter-v198]');if(!b)return;filterV198=b.dataset.specialFilterV198;specialShownV217=specialBatchSizeV217;if(filterV198==='sets'){window.setBinderModeV147?.('binder');return}renderSpecialCollectionV198()});
+      panel.querySelector('#specialGridV198').addEventListener('click',e=>{const more=e.target.closest('[data-special-more-v217]');if(more){specialShownV217+=specialBatchSizeV217;renderSpecialCollectionV198();return}const b=e.target.closest('[data-special-card-v198]');if(b)openSpecialCardV198(b.dataset.specialCardV198)});
     }
   }
   function ensureProfileSpecialSummaryV198(){
     const summary=document.querySelector('#profile .profileMiniSummaryV158');if(summary&&!document.getElementById('profileSpecialsV198')){const d=document.createElement('div');d.className='specialSummaryCardV198';d.innerHTML='<small>SPECIAL CARDS</small><b id="profileSpecialsV198">0 / 19</b>';summary.appendChild(d);summary.style.gridTemplateColumns='repeat(2,minmax(0,1fr))'}
   }
   function renderSpecialCollectionV198(){
-    checkSpecialUnlocksV198(false);ensureBinderSpecialsV198();ensureProfileSpecialSummaryV198();const cards=filteredCardsV198(),grid=document.getElementById('specialGridV198');if(grid)grid.innerHTML=cards.length?cards.map(tileV198).join(''):`<div class="specialEmptyV198">${filterV198==='duplicates'?'Special rewards are one-of-one collectibles, so duplicates cannot occur.':'No cards match this filter.'}</div>`;
+    checkSpecialUnlocksV198(false);ensureBinderSpecialsV198();ensureProfileSpecialSummaryV198();
+    const cards=filteredCardsV198(),grid=document.getElementById('specialGridV198');
+    if(grid){
+      const shown=cards.slice(0,Math.max(specialBatchSizeV217,specialShownV217));
+      const left=Math.max(0,cards.length-shown.length);
+      grid.innerHTML=cards.length?
+        shown.map(tileV198).join('')+(left?`<button type="button" class="specialMoreV217" data-special-more-v217><b>LOAD ${Math.min(specialBatchSizeV217,left)} MORE</b><span>${left} cards remaining</span></button>`:''):
+        `<div class="specialEmptyV198">${filterV198==='duplicates'?'Special rewards are one-of-one collectibles, so duplicates cannot occur.':'No cards match this filter.'}</div>`;
+      requestAnimationFrame(()=>hydrateSpecialImagesV217(grid));
+    }
     document.querySelectorAll('[data-special-filter-v198]').forEach(b=>b.classList.toggle('active',b.dataset.specialFilterV198===filterV198));
     const all=ownedCountV198(),my=ownedCountV198('Mythical Rare'),pr=ownedCountV198('Prismatic Rare');
     const set=(id,v)=>{const x=document.getElementById(id);if(x)x.textContent=v};set('specialCountV198',`${all} / ${SPECIAL_CARDS_V198.length}`);set('specialMythicalV198',`${my} / ${SPECIAL_CARDS_V198.filter(c=>c.rarity==='Mythical Rare').length}`);set('specialPrismaticV198',`${pr} / ${SPECIAL_CARDS_V198.filter(c=>c.rarity==='Prismatic Rare').length}`);set('specialGodPacksV198',String(godPacksV198()));set('specialVaultKeysV198',`${vaultAvailableV198()} KEY${vaultAvailableV198()===1?'':'S'}`);set('profileSpecialsV198',`${all} / ${SPECIAL_CARDS_V198.length}`);const fill=document.getElementById('specialFillV198');if(fill)fill.style.width=(all/SPECIAL_CARDS_V198.length*100)+'%';const vb=document.getElementById('specialOpenVaultV198');if(vb)vb.disabled=vaultAvailableV198()<1||!SPECIAL_CARDS_V198.some(c=>c.rarity==='Prismatic Rare'&&!isOwnedV198(c.id));
@@ -12519,6 +12543,198 @@ body.v203BootSplashActive #v114PackMode.v202PackSelectorPortal{
  function init(){stamp();warmAround(sel);warmAllUnlocked();setTimeout(()=>warmAround(sel),120)}
  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',init,{once:true});else init();
 }catch(err){console.error('V215 instant set switch',err)}})();
+</script>
+
+
+<style id="v216-economy-hotfix-style">
+/* V216 — marketplace exploit hotfix + one-time targeted recovery reset. */
+.marketPriceBlockV156 .v216MarketLimit{
+  display:block;
+  margin-top:7px;
+  color:#6c7890;
+  font-size:9px;
+  font-weight:900;
+  letter-spacing:.08em;
+  text-transform:uppercase;
+}
+.marketPriceBlockV156 .v216MarketLimit strong{color:#7458d8}
+</style>
+<script id="v216-economy-hotfix-script">
+(()=>{try{
+  if(window.__v216EconomyHotfix)return;
+  window.__v216EconomyHotfix=true;
+
+  const MAX_RATIO_V216=1.25;
+  const RESET_PARAM_V216='economyfix';
+  const RESET_TARGET_V216=400;
+
+  function liveMarketV216(c){
+    try{
+      if(!c)return .1;
+      if(c.sourceType==='slab'||c.kind==='slab'){
+        const j=c.sourceRef||c.slab||c;
+        if(typeof gradedValueV56==='function')return Math.max(.1,Number(gradedValueV56(j)||.1));
+      }
+      const raw=c.sourceRef||c.card||c;
+      if(typeof sellPrice==='function')return Math.max(.1,Number(sellPrice(raw)||raw.market||.1));
+      return Math.max(.1,Number(raw.market||.1));
+    }catch(_e){return Math.max(.1,Number(c?.market||.1))}
+  }
+  function maxAskV216(c){return Math.max(.1,Math.round(liveMarketV216(c)*MAX_RATIO_V216*100)/100)}
+
+  /* Replace the old sale curve. Above 125% of live value: impossible to sell. */
+  marketScoreV57=function(l){
+    const market=Math.max(.1,Number(l?.market||.1));
+    const ratio=Number(l?.ask||0)/market;
+    if(ratio>MAX_RATIO_V216)return 0;
+    if(ratio<=.80)return .66;
+    if(ratio<=.90)return .50;
+    if(ratio<=1.00)return .31;
+    if(ratio<=1.08)return .14;
+    if(ratio<=1.15)return .060;
+    if(ratio<=1.20)return .020;
+    return .004;
+  };
+
+  /* Enforce the cap at the actual listing action, not only in the UI. */
+  const originalCreateListingV216=createListingV57;
+  createListingV57=function(){
+    const c=marketPickV57;
+    if(!c)return originalCreateListingV216();
+    const input=document.getElementById('marketPriceV57');
+    const ask=Math.max(.1,Number(input?.value||0));
+    const market=liveMarketV216(c),cap=maxAskV216(c);
+    if(ask>cap+0.0001){
+      if(input){input.value=cap.toFixed(2);input.max=cap.toFixed(2)}
+      toast(`Max ask is $${cap.toFixed(2)} — 125% of live market ($${market.toFixed(2)}).`);
+      try{navigator.vibrate?.([12,35,12])}catch(_e){}
+      return;
+    }
+    return originalCreateListingV216();
+  };
+
+  function syncListingLimitV216(){
+    try{
+      const input=document.getElementById('marketPriceV57');
+      const c=marketPickV57;
+      if(!input||!c)return;
+      const market=liveMarketV216(c),cap=maxAskV216(c);
+      input.max=cap.toFixed(2);
+      let note=document.querySelector('.marketPriceBlockV156 .v216MarketLimit');
+      if(!note){
+        note=document.createElement('small');
+        note.className='v216MarketLimit';
+        document.querySelector('.marketPriceBlockV156')?.appendChild(note);
+      }
+      if(note)note.innerHTML=`Live market <strong>$${market.toFixed(2)}</strong> • max ask <strong>$${cap.toFixed(2)}</strong>`;
+    }catch(_e){}
+  }
+
+  /* Clamp any old exploit listings so they cannot pay out later. */
+  function migrateListingsV216(){
+    let changed=0;
+    const a=state?.marketV57?.listings||[];
+    for(const l of a){
+      const base=Math.max(.1,Number(l.market||.1));
+      const cap=Math.round(base*MAX_RATIO_V216*100)/100;
+      if(Number(l.ask||0)>cap){l.ask=cap;l.economyAdjustedV216=true;changed++}
+    }
+    if(changed){try{save()}catch(_e){localStorage.setItem('tcgRipperSave',JSON.stringify(state))}}
+    return changed;
+  }
+
+  /* Targeted reset: only a player who opens ?economyfix=400 receives it, once. */
+  function applyTargetedResetV216(){
+    let params;
+    try{params=new URLSearchParams(location.search)}catch(_e){return false}
+    if(params.get(RESET_PARAM_V216)!==String(RESET_TARGET_V216))return false;
+    state.economyV216=state.economyV216||{};
+    if(state.economyV216.targetedReset400Applied)return false;
+    const before=Number(state.coins||0);
+    state.coins=RESET_TARGET_V216;
+    state.economyV216.targetedReset400Applied=true;
+    state.economyV216.targetedReset400At=Date.now();
+    state.economyV216.targetedResetPreviousBalance=before;
+    migrateListingsV216();
+    try{save()}catch(_e){localStorage.setItem('tcgRipperSave',JSON.stringify(state))}
+    setTimeout(()=>toast(`Economy correction applied • balance reset to $${RESET_TARGET_V216.toFixed(2)}`),450);
+    try{
+      params.delete(RESET_PARAM_V216);
+      const clean=location.pathname+(params.toString()?`?${params}`:'')+location.hash;
+      history.replaceState(null,'',clean);
+    }catch(_e){}
+    return true;
+  }
+
+  function stampV216(){
+    try{
+      const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');
+      if(row?.querySelector('b'))row.querySelector('b').textContent='V216 ECONOMY HOTFIX';
+      const meta=document.querySelector('meta[name="tcg-cloud-build"]');
+      if(meta)meta.setAttribute('content','V216-economy-hotfix');
+    }catch(_e){}
+  }
+
+  function initV216(){
+    stampV216();
+    migrateListingsV216();
+    applyTargetedResetV216();
+    syncListingLimitV216();
+    setTimeout(syncListingLimitV216,80);
+    setTimeout(syncListingLimitV216,350);
+  }
+
+  document.addEventListener('click',e=>{
+    if(e.target.closest('#marketCreateV57,[data-market-card-index-v157],[data-market-source-v157]'))setTimeout(syncListingLimitV216,0);
+  },true);
+  document.addEventListener('input',e=>{
+    if(e.target?.id==='marketPriceV57'){
+      syncListingLimitV216();
+      const cap=Number(e.target.max||0);
+      if(cap&&Number(e.target.value)>cap)e.target.setCustomValidity(`Maximum asking price is $${cap.toFixed(2)}`);
+      else e.target.setCustomValidity('');
+    }
+  },true);
+
+  if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',initV216,{once:true});
+  else initV216();
+}catch(err){console.error('V216 economy hotfix',err)}})();
+</script>
+
+
+<style id="v217-ios-specials-style">
+.specialMoreV217{grid-column:1/-1;display:flex;align-items:center;justify-content:space-between;gap:12px;width:100%;padding:14px 16px;border-radius:19px;border:1px solid rgba(255,255,255,.9);background:linear-gradient(135deg,rgba(255,255,255,.88),rgba(232,239,250,.76));color:#24324a;box-shadow:0 10px 24px rgba(43,61,87,.08);text-align:left}
+.specialMoreV217 b{font:1000 10px/1 system-ui;letter-spacing:.9px}.specialMoreV217 span{color:#7f8ca0;font:850 9px/1 system-ui}
+html.v217IOSSpecialLite .specialHeroV198:after{animation:none!important;opacity:.16!important}
+html.v217IOSSpecialLite .specialTileV198{box-shadow:0 9px 20px rgba(47,73,98,.08)!important}
+html.v217IOSSpecialLite .specialTileV198 .specialDamascusV198,
+html.v217IOSSpecialLite .specialTileV198 .specialSparkV198,
+html.v217IOSSpecialLite .specialTileV198 .specialLightV198{display:none!important}
+html.v217IOSSpecialLite .specialTileV198 .specialFoilV198{animation:v217IOSFoil 7s ease-in-out infinite!important;opacity:.45!important;mix-blend-mode:screen!important}
+html.v217IOSSpecialLite .specialLockChipV198{backdrop-filter:none!important;-webkit-backdrop-filter:none!important;background:rgba(10,16,28,.82)!important}
+@keyframes v217IOSFoil{0%,18%{transform:translateX(-78%)}64%,100%{transform:translateX(78%)}}
+@media(max-width:520px){.specialMoreV217{padding:13px 14px}}
+</style>
+<script id="v217-ios-specials-script">
+(()=>{try{
+ if(window.__v217IOSSpecials)return;window.__v217IOSSpecials=true;
+ const ua=navigator.userAgent||'';
+ const ios=/iP(hone|ad|od)/i.test(ua)||(navigator.platform==='MacIntel'&&navigator.maxTouchPoints>1);
+ if(ios)document.documentElement.classList.add('v217IOSSpecialLite');
+ const base=window.setBinderModeV147;
+ if(typeof base==='function')window.setBinderModeV147=function(mode){
+   const r=base.apply(this,arguments);
+   if(mode==='specials'){
+     setTimeout(()=>{try{window.scrollTo(0,0)}catch(_e){}},0);
+   }else if(ios){
+     setTimeout(()=>{try{document.querySelectorAll('#specialGridV198 img[data-v217-special-img]').forEach(img=>img.removeAttribute('src'))}catch(_e){}},120);
+   }
+   return r;
+ };
+ const row=[...document.querySelectorAll('.settingsDataLineV158')].find(x=>x.querySelector('span')?.textContent.trim()==='Game Version');
+ if(row?.querySelector('b'))row.querySelector('b').textContent='V217 IOS SPECIALS STABILITY';
+ const meta=document.querySelector('meta[name="tcg-cloud-build"]');if(meta)meta.setAttribute('content','V217-ios-specials-stability');
+}catch(err){console.error('V217 iOS Specials stability',err)}})();
 </script>
 
 </body></html>
